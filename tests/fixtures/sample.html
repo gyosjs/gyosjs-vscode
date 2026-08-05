@@ -1,0 +1,4 @@
+<main g-scope="Page" g-outlet>
+  <button @click="open = true">Open</button>
+  <div *if="open" g-transition="fade">Content</div>
+</main>
