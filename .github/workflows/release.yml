@@ -1,0 +1,78 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Verify tag version
+        run: test "${GITHUB_REF_NAME#v}" = "$(node -p "require('./package.json').version")"
+      - run: npm audit --audit-level=high
+      - run: xvfb-run -a npm run test:integration
+      - run: npm run test:web
+      - run: npm run package
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gyosjs-vsix
+          path: gyosjs-*.vsix
+          if-no-files-found: error
+
+  publish-marketplace:
+    needs: package
+    runs-on: ubuntu-latest
+    environment: marketplace
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          name: gyosjs-vsix
+      - run: npx vsce publish --packagePath gyosjs-${GITHUB_REF_NAME#v}.vsix --pat "$VSCE_PAT"
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+
+  publish-open-vsx:
+    needs: package
+    runs-on: ubuntu-latest
+    environment: marketplace
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          name: gyosjs-vsix
+      - run: npx ovsx publish gyosjs-${GITHUB_REF_NAME#v}.vsix -p "$OVSX_PAT"
+        env:
+          OVSX_PAT: ${{ secrets.OVSX_PAT }}
+
+  github-release:
+    needs: [publish-marketplace, publish-open-vsx]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: gyosjs-vsix
+      - run: gh release create "$GITHUB_REF_NAME" gyosjs-${GITHUB_REF_NAME#v}.vsix --repo "$GITHUB_REPOSITORY" --generate-notes
+        env:
+          GH_TOKEN: ${{ github.token }}
