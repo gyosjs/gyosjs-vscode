@@ -1,0 +1,134 @@
+{
+  "name": "gyosjs",
+  "displayName": "GyosJS",
+  "description": "Syntax highlighting, IntelliSense, hovers, snippets, and diagnostics for GyosJS templates.",
+  "version": "0.1.0",
+  "publisher": "gyosjs",
+  "preview": true,
+  "license": "MIT",
+  "icon": "media/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gyosjs/gyosjs-vscode.git"
+  },
+  "homepage": "https://github.com/gyosjs/gyosjs-vscode#readme",
+  "bugs": {
+    "url": "https://github.com/gyosjs/gyosjs-vscode/issues"
+  },
+  "engines": {
+    "vscode": "^1.90.0",
+    "node": ">=20"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets",
+    "Linters"
+  ],
+  "keywords": [
+    "gyosjs",
+    "gyos",
+    "html",
+    "blade",
+    "php",
+    "mpa",
+    "reactivity",
+    "directives"
+  ],
+  "extensionKind": [
+    "ui",
+    "workspace"
+  ],
+  "main": "./dist/node/extension.cjs",
+  "browser": "./dist/web/extension.js",
+  "activationEvents": [
+    "onLanguage:html",
+    "onLanguage:php",
+    "onLanguage:blade",
+    "onLanguage:laravel-blade"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    },
+    "virtualWorkspaces": {
+      "supported": true
+    }
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "gyosjs.openDocumentation",
+        "title": "GyosJS: Open Documentation"
+      },
+      {
+        "command": "gyosjs.openApiReference",
+        "title": "GyosJS: Open API Reference"
+      },
+      {
+        "command": "gyosjs.openMpaGuide",
+        "title": "GyosJS: Open MPA Boost Guide"
+      }
+    ],
+    "configuration": {
+      "title": "GyosJS",
+      "properties": {
+        "gyosjs.diagnostics.enabled": {
+          "type": "boolean",
+          "default": true,
+          "scope": "resource",
+          "description": "Enable conservative diagnostics for GyosJS template contracts."
+        }
+      }
+    },
+    "grammars": [
+      {
+        "scopeName": "gyosjs.injection",
+        "path": "./syntaxes/gyos.injection.json",
+        "injectTo": [
+          "text.html.basic",
+          "text.html.php",
+          "text.html.derivative",
+          "text.html.php.blade",
+          "text.html.laravel-blade"
+        ]
+      }
+    ],
+    "snippets": [
+      {
+        "language": "html",
+        "path": "./snippets/gyos.code-snippets"
+      },
+      {
+        "language": "php",
+        "path": "./snippets/gyos.code-snippets"
+      }
+    ]
+  },
+  "scripts": {
+    "clean": "node scripts/clean.mjs",
+    "build": "node scripts/build.mjs --production",
+    "build:dev": "node scripts/build.mjs",
+    "watch": "node scripts/build.mjs --watch",
+    "typecheck": "tsc --noEmit",
+    "test:unit": "vitest run",
+    "test:integration": "npm run build:dev && node scripts/run-electron-tests.mjs",
+    "test:web": "npm run build:dev && node scripts/run-web-tests.mjs",
+    "test": "npm run test:unit",
+    "check": "npm run typecheck && npm run test:unit && npm run build",
+    "package": "npm run check && vsce package --no-dependencies",
+    "publish:marketplace": "npm run check && vsce publish",
+    "publish:open-vsx": "npm run check && ovsx publish",
+    "vscode:prepublish": "npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.43",
+    "@types/vscode": "^1.90.0",
+    "@vscode/test-electron": "^3.1.0",
+    "@vscode/test-web": "^0.0.81",
+    "@vscode/vsce": "^3.9.2",
+    "esbuild": "^0.28.1",
+    "ovsx": "^1.1.0",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.6"
+  }
+}

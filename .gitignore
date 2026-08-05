@@ -1,0 +1,10 @@
+node_modules/
+.tools/
+dist/
+artifacts/
+coverage/
+.vscode-test/
+.vscode-test-web/
+*.vsix
+*.log
+.DS_Store

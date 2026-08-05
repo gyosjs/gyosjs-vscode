@@ -1,0 +1,85 @@
+{
+  "GyosJS Scope Counter": {
+    "prefix": "gyos-scope",
+    "description": "Create a reactive GyosJS scope.",
+    "body": [
+      "<div g-scope=\"{ count: 0 }\">",
+      "  <p>Count: {count}</p>",
+      "  <button type=\"button\" @click=\"count++\">${1:Increment}</button>",
+      "</div>"
+    ]
+  },
+  "GyosJS Conditional Chain": {
+    "prefix": "gyos-if",
+    "description": "Create an if/elseif/else structural chain.",
+    "body": [
+      "<div *if=\"${1:condition}\">${2:Primary}</div>",
+      "<div *elseif=\"${3:otherCondition}\">${4:Alternative}</div>",
+      "<div *else>${5:Fallback}</div>"
+    ]
+  },
+  "GyosJS Keyed Loop": {
+    "prefix": "gyos-for",
+    "description": "Create a keyed GyosJS loop.",
+    "body": [
+      "<div *for=\"item, index in ${1:items}\" g-key=\"item.${2:id}\">",
+      "  {item.label}",
+      "</div>"
+    ]
+  },
+  "GyosJS Validated Form": {
+    "prefix": "gyos-form",
+    "description": "Create a GyosJS validated form.",
+    "body": [
+      "<form g-scope g-form=\"${1:formState}\" g-submit=\"${2:submit}\" g-no-boost>",
+      "  <input g-model=\"${3:email}\" g-validate=\"required|email\" name=\"${3:email}\">",
+      "  <div g-errors=\"${1:formState}\"></div>",
+      "  <button type=\"submit\" :disabled=\"${1:formState}.\\$invalid\">${4:Submit}</button>",
+      "</form>"
+    ]
+  },
+  "GyosJS Portal Modal": {
+    "prefix": "gyos-modal",
+    "description": "Create a conditional portal modal.",
+    "body": [
+      "<button type=\"button\" @click=\"${1:open} = true\">${2:Open}</button>",
+      "<div *if=\"${1:open}\" g-portal=\"${3:#modal-root}\" g-transition=\"fade\">",
+      "  <div class=\"modal\" @click.outside=\"${1:open} = false\">${4:Modal content}</div>",
+      "</div>"
+    ]
+  },
+  "GyosJS Boosted Layout": {
+    "prefix": "gyos-boost",
+    "description": "Create a basic MPA Boost layout.",
+    "body": [
+      "<body g-boost>",
+      "  <main id=\"${1:app}\" g-outlet>",
+      "    ${2:Page content}",
+      "  </main>",
+      "</body>"
+    ]
+  },
+  "GyosJS Partial Router Action": {
+    "prefix": "gyos-router-action",
+    "description": "Create a partial MPA Boost action.",
+    "body": [
+      "<button",
+      "  g-router-link=\"${1:/endpoint}\"",
+      "  g-router-method=\"${2|GET,POST,PUT,PATCH,DELETE|}\"",
+      "  g-target=\"${3:#target}\"",
+      "  g-swap=\"${4|inner,morph,append,prepend,replace|}\"",
+      "  g-router-spin>",
+      "  ${5:Load}",
+      "</button>"
+    ]
+  },
+  "GyosJS Persisted Media": {
+    "prefix": "gyos-persist-media",
+    "description": "Create a media island preserved across boosted navigation.",
+    "body": [
+      "<audio g-persist=\"${1:player}\" controls>",
+      "  <source src=\"${2:/media/audio.mp3}\" type=\"${3:audio/mpeg}\">",
+      "</audio>"
+    ]
+  }
+}

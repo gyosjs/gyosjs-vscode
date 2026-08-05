@@ -1,0 +1,111 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "scopeName": "gyosjs.injection",
+  "injectionSelector": "L:text.html -comment -source.css -source.js -source.php",
+  "patterns": [
+    {
+      "include": "#expression-double"
+    },
+    {
+      "include": "#expression-single"
+    },
+    {
+      "include": "#interpolation"
+    },
+    {
+      "include": "#attribute-names"
+    }
+  ],
+  "repository": {
+    "attribute-names": {
+      "patterns": [
+        {
+          "match": "(?<![\\w-])(\\*(?:if|elseif|else|for|switch|case|default|await|pending|then|catch))(?=\\s*=|\\s|/?>)",
+          "name": "keyword.control.gyosjs"
+        },
+        {
+          "match": "(?<![\\w-])(g-(?:scope(?:-persist)?|model(?:\\.\\d+|\\.[\\w-]+)*|show|text|html|ref|static|ignore|key|transition(?:\\.\\d+)?|portal|hydrate|provide|form|submit|validate|errors|cloak|focus|tooltip|markdown|on(?::[\\w-]+)?|ignore-outside-click|boost|no-boost|outlet|target|swap|preload|snapshot|persist|current-head|change-state|current-state|noscroll|router-spin|router-link|router-method|router-params|script-once|script-wrap))(?=\\s*=|\\s|/?>)",
+          "name": "entity.other.attribute-name.gyosjs"
+        },
+        {
+          "match": "(?<![\\w-])(gd-[\\w-]+|gm-[\\w-]+(?::[\\w-]+)*)(?=\\s*=|\\s|/?>)",
+          "name": "variable.other.gyosjs"
+        },
+        {
+          "match": "(?<![\\w-])(@[A-Za-z][\\w:-]*(?:\\.(?:[\\w-]+|\\d+))*)(?=\\s*=)",
+          "name": "entity.name.function.gyosjs"
+        },
+        {
+          "match": "(?<![\\w-])(:[A-Za-z][\\w-]*)(?=\\s*=)",
+          "name": "variable.other.property.gyosjs"
+        }
+      ]
+    },
+    "expression-double": {
+      "begin": "(?<![\\w-])((?:g-(?:scope|model(?:\\.\\d+|\\.[\\w-]+)*|show|text|html|transition(?:\\.\\d+)?|portal|hydrate|tooltip|markdown|submit|validate|errors|router-params)|\\*(?:if|elseif|for|switch|case|await|then|catch)|@[A-Za-z][\\w:-]*(?:\\.(?:[\\w-]+|\\d+))*|:[A-Za-z][\\w-]*|gd-[\\w-]+|gm-[\\w-]+(?::[\\w-]+)*))\\s*=\\s*(\")",
+      "beginCaptures": {
+        "1": {
+          "name": "entity.other.attribute-name.gyosjs"
+        },
+        "2": {
+          "name": "punctuation.definition.string.begin.html"
+        }
+      },
+      "end": "\"",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.string.end.html"
+        }
+      },
+      "name": "meta.embedded.inline.gyosjs",
+      "patterns": [
+        {
+          "include": "source.js"
+        }
+      ]
+    },
+    "expression-single": {
+      "begin": "(?<![\\w-])((?:g-(?:scope|model(?:\\.\\d+|\\.[\\w-]+)*|show|text|html|transition(?:\\.\\d+)?|portal|hydrate|tooltip|markdown|submit|validate|errors|router-params)|\\*(?:if|elseif|for|switch|case|await|then|catch)|@[A-Za-z][\\w:-]*(?:\\.(?:[\\w-]+|\\d+))*|:[A-Za-z][\\w-]*|gd-[\\w-]+|gm-[\\w-]+(?::[\\w-]+)*))\\s*=\\s*(')",
+      "beginCaptures": {
+        "1": {
+          "name": "entity.other.attribute-name.gyosjs"
+        },
+        "2": {
+          "name": "punctuation.definition.string.begin.html"
+        }
+      },
+      "end": "'",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.string.end.html"
+        }
+      },
+      "name": "meta.embedded.inline.gyosjs",
+      "patterns": [
+        {
+          "include": "source.js"
+        }
+      ]
+    },
+    "interpolation": {
+      "begin": "(?<!\\{)\\{(?![!{])",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.section.embedded.begin.gyosjs"
+        }
+      },
+      "end": "\\}(?!\\})",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.section.embedded.end.gyosjs"
+        }
+      },
+      "name": "meta.embedded.inline.gyosjs",
+      "patterns": [
+        {
+          "include": "source.js"
+        }
+      ]
+    }
+  }
+}
