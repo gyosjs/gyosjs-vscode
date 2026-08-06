@@ -77,7 +77,7 @@ describe('conservative template diagnostics', () => {
     const source = `<section g-scope>
       <div *if="open"><div g-transition.150="custom"></div></div>
       <div g-swap="{{ $mode }}"></div>
-      <div g-router-method="<?= $method ?>"></div>
+      <div g-router-link="/items" g-router-method="<?= $method ?>"></div>
       <div g-hydrate="@js($strategy)" g-scope></div>
       <div g-provide="{&quot;theme&quot;:&quot;dark&quot;}"></div>
     </section>`;
@@ -86,5 +86,18 @@ describe('conservative template diagnostics', () => {
 
   it('does not throw on an invalid numeric HTML entity', () => {
     expect(codes('<div g-provide="{&quot;code&quot;:&quot;&#999999999;&quot;}"></div>')).toEqual([]);
+  });
+
+  it('finds deterministic MPA Boost contract errors', () => {
+    const source = `<body g-boost>
+      <main id="app" g-outlet><a g-target="#missing">Missing</a></main>
+      <button g-router-method="POST" g-router-params="{ id: 1 }"></button>
+      <a g-change-state g-current-state href="/items">Items</a>
+      <div g-persist="player"></div><audio g-persist="player"></audio>
+    </body>`;
+    expect(codes(source)).toEqual(expect.arrayContaining([
+      'missing-router-target', 'router-method-without-link', 'router-params-without-link',
+      'conflicting-router-state', 'duplicate-persist-key'
+    ]));
   });
 });
