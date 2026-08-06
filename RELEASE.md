@@ -7,7 +7,8 @@ This repository publishes the official `gyosjs.gyosjs` extension to the Visual S
 - Create `https://github.com/gyosjs/gyosjs-vscode` and push this repository to its `main` branch.
 - Reserve or create the `gyosjs` publisher in the Visual Studio Marketplace.
 - Create the `gyosjs` namespace in Open VSX.
-- Add `VSCE_PAT` and `OVSX_PAT` as GitHub Actions secrets. Scope each token only to extension publishing.
+- Add `VSCE_PAT` and `OVSX_PAT` as GitHub Actions secrets when automated registry publishing is required. Scope each token only to extension publishing.
+- Set the repository variable `PUBLISH_MARKETPLACE` or `PUBLISH_OPEN_VSX` to `true` only after the matching publisher, namespace, and secret are ready. Leave a variable unset when that registry is published manually.
 - Protect the `marketplace` GitHub environment if release approval is required.
 
 ## Prepare A Version
@@ -19,11 +20,11 @@ This repository publishes the official `gyosjs.gyosjs` extension to the Visual S
 5. Replace `Unreleased` in `CHANGELOG.md` with the release date.
 6. Commit the release and create a matching tag such as `v0.1.0`.
 
-The tag version must equal `package.json#version`. The release workflow rejects a mismatch, packages one VSIX, publishes that artifact to both registries, and creates the GitHub Release.
+The tag version must equal `package.json#version`. The release workflow rejects a mismatch, packages one VSIX, optionally publishes that artifact to each enabled registry, and creates the GitHub Release. A failed enabled registry blocks the GitHub Release; a disabled registry is safely skipped.
 
 ## Manual Fallback
 
-If registry automation is unavailable, use the same verified checkout:
+If registry automation is unavailable, upload the generated VSIX in the registry publisher UI or use the same verified checkout:
 
 ```bash
 npm run package

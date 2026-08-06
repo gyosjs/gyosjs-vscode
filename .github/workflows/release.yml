@@ -30,8 +30,9 @@ jobs:
           path: gyosjs-*.vsix
           if-no-files-found: error
 
-  publish-marketplace:
+  publish_marketplace:
     needs: package
+    if: ${{ vars.PUBLISH_MARKETPLACE == 'true' }}
     runs-on: ubuntu-latest
     environment: marketplace
     steps:
@@ -48,8 +49,9 @@ jobs:
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
 
-  publish-open-vsx:
+  publish_open_vsx:
     needs: package
+    if: ${{ vars.PUBLISH_OPEN_VSX == 'true' }}
     runs-on: ubuntu-latest
     environment: marketplace
     steps:
@@ -66,8 +68,15 @@ jobs:
         env:
           OVSX_PAT: ${{ secrets.OVSX_PAT }}
 
-  github-release:
-    needs: [publish-marketplace, publish-open-vsx]
+  github_release:
+    needs: [package, publish_marketplace, publish_open_vsx]
+    if: >-
+      ${{
+        always() &&
+        needs.package.result == 'success' &&
+        (needs.publish_marketplace.result == 'success' || needs.publish_marketplace.result == 'skipped') &&
+        (needs.publish_open_vsx.result == 'success' || needs.publish_open_vsx.result == 'skipped')
+      }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
