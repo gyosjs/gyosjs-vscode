@@ -11,6 +11,10 @@ export interface TemplateIssue {
   severity: IssueSeverity;
 }
 
+export interface AnalyzeTemplateOptions {
+  fullDocument?: boolean;
+}
+
 const structuralNames = new Set(ALL_DEFINITIONS.filter(item => item.kind === 'structural').map(item => item.name));
 const reactiveDirectiveNames = new Set(ALL_DEFINITIONS.filter(item => item.kind === 'directive').map(item => item.name));
 const activeUrlElements = new Set(['base', 'embed', 'iframe', 'link', 'object', 'script']);
@@ -215,13 +219,89 @@ function validateAttribute(element: ElementToken, attribute: AttributeToken, iss
   }
 }
 
-export function analyzeTemplate(source: string): TemplateIssue[] {
+function isLiteralValue(value: string): boolean {
+  return !isServerRenderedValue(value) && !/[{}$]/.test(value);
+}
+
+function isPlausibleSelector(value: string): boolean {
+  let square = 0;
+  let round = 0;
+  let quote: string | null = null;
+  for (let index = 0; index < value.length; index++) {
+    const char = value[index];
+    if (quote) {
+      if (char === '\\') index++;
+      else if (char === quote) quote = null;
+      continue;
+    }
+    if (char === '"' || char === "'") quote = char;
+    else if (char === '[') square++;
+    else if (char === ']' && --square < 0) return false;
+    else if (char === '(') round++;
+    else if (char === ')' && --round < 0) return false;
+  }
+  return Boolean(value.trim()) && !quote && square === 0 && round === 0 && !/[#.:>+~,]\s*$/.test(value);
+}
+
+function validateRouterElement(element: ElementToken, issues: TemplateIssue[]): void {
+  const routerLink = getAttribute(element, 'g-router-link');
+  const method = getAttribute(element, 'g-router-method');
+  const params = getAttribute(element, 'g-router-params');
+  const changeState = getAttribute(element, 'g-change-state');
+  const currentState = getAttribute(element, 'g-current-state');
+  const target = getAttribute(element, 'g-target');
+  const currentHead = getAttribute(element, 'g-current-head');
+  const preload = getAttribute(element, 'g-preload');
+
+  if (method && !routerLink) issues.push(issue(method, 'g-router-method requires g-router-link on the same element.', 'router-method-without-link'));
+  if (params && !routerLink) issues.push(issue(params, 'g-router-params requires g-router-link on the same element.', 'router-params-without-link'));
+  if (changeState && currentState) issues.push(issue(currentState, 'g-current-state conflicts with g-change-state.', 'conflicting-router-state'));
+  if (preload && element.tagName !== 'a') issues.push(issue(preload, 'g-preload is only supported on anchors.', 'invalid-preload-element'));
+  if (currentHead && target) issues.push(issue(currentHead, 'g-current-head has no effect on a partial g-target navigation.', 'current-head-with-target', 'warning'));
+  if (target?.value && isLiteralValue(target.value) && !isPlausibleSelector(target.value.trim())) {
+    issues.push(issue(target, 'g-target must contain a valid CSS selector.', 'invalid-router-target'));
+  }
+  for (const attribute of element.attributes) {
+    const name = attribute.name.toLowerCase();
+    if ((name === 'g-script-once' || name === 'g-script-wrap') && element.tagName !== 'script') {
+      issues.push(issue(attribute, `${name} is only supported on script elements.`, 'invalid-script-lifecycle-element'));
+    }
+  }
+}
+
+export function analyzeTemplate(source: string, options: AnalyzeTemplateOptions = {}): TemplateIssue[] {
   const issues: TemplateIssue[] = [];
   const scan = scanTemplate(source);
   for (const element of scan.elements) {
     if (element.ignored) continue;
     validateStructure(element, scan.roots, issues);
     for (const attribute of element.attributes) validateAttribute(element, attribute, issues);
+    validateRouterElement(element, issues);
+  }
+
+  const persist = new Map<string, AttributeToken>();
+  const ids = new Set<string>();
+  for (const element of scan.elements) {
+    if (element.ignored) continue;
+    const id = getAttribute(element, 'id')?.value?.trim();
+    if (id) ids.add(id);
+    const attribute = getAttribute(element, 'g-persist');
+    const key = attribute?.value?.trim();
+    if (attribute && key && isLiteralValue(key)) {
+      const previous = persist.get(key);
+      if (previous) issues.push(issue(attribute, `Duplicate g-persist key "${key}" in the same document.`, 'duplicate-persist-key'));
+      else persist.set(key, attribute);
+    }
+  }
+  if (options.fullDocument !== false) {
+    for (const element of scan.elements) {
+      if (element.ignored) continue;
+      const target = getAttribute(element, 'g-target');
+      const value = target?.value?.trim();
+      if (target && value && /^#[A-Za-z_][\w:.-]*$/.test(value) && !ids.has(value.slice(1))) {
+        issues.push(issue(target, `No element with id "${value.slice(1)}" exists in this document.`, 'missing-router-target'));
+      }
+    }
   }
   return issues.sort((left, right) => left.start - right.start || left.code.localeCompare(right.code));
 }

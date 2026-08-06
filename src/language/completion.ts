@@ -13,6 +13,8 @@ import {
   type AttributeDefinition
 } from './contract';
 import { attributeAtOffset, scanTemplate, type AttributeToken, type ElementToken } from './scanner';
+import { contextualCompletions } from './intelligence';
+import type { WorkspaceIndex } from './workspace-index';
 
 function markdownFor(definition: AttributeDefinition): vscode.MarkdownString {
   const markdown = new vscode.MarkdownString();
@@ -76,6 +78,8 @@ function currentNameFragment(document: vscode.TextDocument, element: ElementToke
 }
 
 export class GyosCompletionProvider implements vscode.CompletionItemProvider {
+  constructor(private readonly index: WorkspaceIndex) {}
+
   provideCompletionItems(document: vscode.TextDocument, position: vscode.Position): vscode.CompletionItem[] {
     const source = document.getText();
     const offset = document.offsetAt(position);
@@ -83,8 +87,11 @@ export class GyosCompletionProvider implements vscode.CompletionItemProvider {
     const context = attributeAtOffset(scan, offset);
 
     if (context && context.attribute.valueStart !== null && offset >= context.attribute.valueStart) {
-      return attributeValueCompletions(context.attribute);
+      return [...attributeValueCompletions(context.attribute), ...contextualCompletions(document, position, this.index)];
     }
+
+    const expressionItems = contextualCompletions(document, position, this.index);
+    if (expressionItems.length) return expressionItems;
 
     const element = scan.elements.find(candidate => offset > candidate.start && offset <= candidate.openEnd);
     if (!element || element.ignored) return [];
@@ -117,6 +124,14 @@ export class GyosCompletionProvider implements vscode.CompletionItemProvider {
     }
     for (const event of COMMON_EVENTS) {
       if (!existing.has(`@${event}`)) items.push(dynamicAttributeCompletion(`@${event}`, 'GyosJS event handler', `@${event}="$1"`, attributeRange));
+    }
+    for (const directive of this.index.symbols('directive')) {
+      const name = `g-${directive.name}`;
+      if (!existing.has(name)) items.push(dynamicAttributeCompletion(name, 'GyosJS custom directive', `${name}="$1"`, attributeRange));
+    }
+    for (const event of new Set(this.index.symbols('event').map(symbol => symbol.name))) {
+      const name = `g-on:${event}`;
+      if (!existing.has(name)) items.push(dynamicAttributeCompletion(name, 'GyosJS scope event channel', `${name}="$1"`, attributeRange));
     }
     items.push(dynamicAttributeCompletion('gd-property', 'GyosJS auto-scope data', 'gd-${1:name}="$2"', attributeRange));
     items.push(dynamicAttributeCompletion('gm-method', 'GyosJS auto-scope method', 'gm-${1:name}="$2"', attributeRange));

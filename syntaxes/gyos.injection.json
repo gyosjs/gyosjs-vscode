@@ -42,7 +42,7 @@
       ]
     },
     "expression-double": {
-      "begin": "(?<![\\w-])((?:g-(?:scope|model(?:\\.\\d+|\\.[\\w-]+)*|show|text|html|transition(?:\\.\\d+)?|portal|hydrate|tooltip|markdown|submit|validate|errors|router-params)|\\*(?:if|elseif|for|switch|case|await|then|catch)|@[A-Za-z][\\w:-]*(?:\\.(?:[\\w-]+|\\d+))*|:[A-Za-z][\\w-]*|gd-[\\w-]+|gm-[\\w-]+(?::[\\w-]+)*))\\s*=\\s*(\")",
+      "begin": "(?<![\\w-])((?:g-(?:scope|model(?:\\.\\d+|\\.[\\w-]+)*|show|text|html|key|transition(?:\\.\\d+)?|portal|hydrate|tooltip|markdown|on(?::[\\w-]+)?|submit|validate|errors|router-params)|\\*(?:if|elseif|for|switch|case|await|then|catch)|@[A-Za-z][\\w:-]*(?:\\.(?:[\\w-]+|\\d+))*|:[A-Za-z][\\w-]*|gd-[\\w-]+|gm-[\\w-]+(?::[\\w-]+)*))\\s*=\\s*(\")",
       "beginCaptures": {
         "1": {
           "name": "entity.other.attribute-name.gyosjs"
@@ -65,7 +65,7 @@
       ]
     },
     "expression-single": {
-      "begin": "(?<![\\w-])((?:g-(?:scope|model(?:\\.\\d+|\\.[\\w-]+)*|show|text|html|transition(?:\\.\\d+)?|portal|hydrate|tooltip|markdown|submit|validate|errors|router-params)|\\*(?:if|elseif|for|switch|case|await|then|catch)|@[A-Za-z][\\w:-]*(?:\\.(?:[\\w-]+|\\d+))*|:[A-Za-z][\\w-]*|gd-[\\w-]+|gm-[\\w-]+(?::[\\w-]+)*))\\s*=\\s*(')",
+      "begin": "(?<![\\w-])((?:g-(?:scope|model(?:\\.\\d+|\\.[\\w-]+)*|show|text|html|key|transition(?:\\.\\d+)?|portal|hydrate|tooltip|markdown|on(?::[\\w-]+)?|submit|validate|errors|router-params)|\\*(?:if|elseif|for|switch|case|await|then|catch)|@[A-Za-z][\\w:-]*(?:\\.(?:[\\w-]+|\\d+))*|:[A-Za-z][\\w-]*|gd-[\\w-]+|gm-[\\w-]+(?::[\\w-]+)*))\\s*=\\s*(')",
       "beginCaptures": {
         "1": {
           "name": "entity.other.attribute-name.gyosjs"

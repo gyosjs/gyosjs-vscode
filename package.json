@@ -67,6 +67,14 @@
       {
         "command": "gyosjs.openMpaGuide",
         "title": "GyosJS: Open MPA Boost Guide"
+      },
+      {
+        "command": "gyosjs.rebuildWorkspaceIndex",
+        "title": "GyosJS: Rebuild Workspace Index"
+      },
+      {
+        "command": "gyosjs.auditMpaBoost",
+        "title": "GyosJS: Audit MPA Boost"
       }
     ],
     "configuration": {
@@ -77,6 +85,25 @@
           "default": true,
           "scope": "resource",
           "description": "Enable conservative diagnostics for GyosJS template contracts."
+        },
+        "gyosjs.indexing.enabled": {
+          "type": "boolean",
+          "default": true,
+          "scope": "window",
+          "description": "Index GyosJS templates and JavaScript/TypeScript registrations for navigation and IntelliSense."
+        },
+        "gyosjs.indexing.exclude": {
+          "type": "array",
+          "default": [],
+          "scope": "window",
+          "items": { "type": "string" },
+          "description": "Additional path fragments excluded from the GyosJS workspace index."
+        },
+        "gyosjs.mpa.staticRouteValidation": {
+          "type": "boolean",
+          "default": true,
+          "scope": "resource",
+          "description": "Validate literal HTML routes used by MPA Boost against workspace files."
         }
       }
     },
