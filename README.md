@@ -14,6 +14,10 @@ The extension helps you write GyosJS templates without requiring a framework-spe
 - Hover documentation with a runnable syntax example and a link to the canonical GyosJS documentation.
 - Snippets for scopes, keyed loops, conditionals, validated forms, portals, boosted layouts, partial router actions, and persisted media.
 - Conservative diagnostics for deterministic contract mistakes such as orphan branches, malformed `*for`, invalid modifiers, unsafe model paths, and missing companion directives.
+- Workspace-aware semantic highlighting, completion, hover, Ctrl+Click, and references for scopes, members, aliases, refs, and GyosJS registries.
+- Runtime API and component-context IntelliSense for inline scripts and expressions, including `Gyos.provide/inject`, event channels, `$refs`, `$inject`, `$emit`, `$on`, `$watch`, and form-state helpers.
+- Cross-template navigation for dependency keys, `g-on:*` channels, `g-ref` members, `*for` sources/aliases, custom transitions, validators, and pipes.
+- MPA Boost target navigation, static HTML route navigation, persist references, and a `GyosJS: Audit MPA Boost` workspace command.
 
 ```html
 <main g-scope="Cart" g-outlet>
