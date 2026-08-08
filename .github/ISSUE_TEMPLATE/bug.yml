@@ -1,0 +1,68 @@
+name: Extension bug
+description: Report a reproducible highlighting, IntelliSense, navigation, indexing, diagnostic, or MPA audit problem.
+title: "[Bug]: "
+body:
+  - type: input
+    id: extension-version
+    attributes:
+      label: Extension version
+      placeholder: 0.1.0
+    validations:
+      required: true
+  - type: input
+    id: vscode-version
+    attributes:
+      label: VS Code version and environment
+      placeholder: VS Code 1.104 desktop, Windows 11
+    validations:
+      required: true
+  - type: dropdown
+    id: language
+    attributes:
+      label: Language mode
+      options:
+        - HTML
+        - PHP
+        - Blade
+        - Laravel Blade
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: feature
+    attributes:
+      label: Feature area
+      options:
+        - Syntax highlighting
+        - Completion or snippets
+        - Hover
+        - Go to definition or Ctrl+Click
+        - Workspace indexing
+        - Diagnostics
+        - MPA Boost audit
+        - Extension activation or web support
+    validations:
+      required: true
+  - type: textarea
+    id: fixture
+    attributes:
+      label: Minimal workspace fixture
+      description: Include the smallest template and registration code that reproduces the issue.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I rebuilt the workspace index and reproduced the issue.
+          required: true
+        - label: I confirmed the syntax is supported by the current GyosJS runtime documentation.
+          required: true

@@ -16,6 +16,7 @@ tsconfig.json
 vitest.config.*
 package-lock.json
 CONTRIBUTING.md
+MAINTAINING.md
 RELEASE.md
 SECURITY.md
 *.map

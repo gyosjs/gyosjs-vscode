@@ -1,0 +1,30 @@
+name: DX proposal
+description: Propose an editor capability for an existing GyosJS development problem.
+title: "[Proposal]: "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Development workflow problem
+      description: Describe what is difficult to discover, navigate, validate, or refactor today.
+    validations:
+      required: true
+  - type: textarea
+    id: runtime-contract
+    attributes:
+      label: Relevant runtime contract
+      description: Link the directive, API, context property, router attribute, or extension point in GyosJS docs.
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Proposed editor behavior
+    validations:
+      required: true
+  - type: textarea
+    id: false-positives
+    attributes:
+      label: False-positive and custom-extension considerations
+    validations:
+      required: true

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: GyosJS runtime issues
+    url: https://github.com/gyosjs/gyosjs/issues/new/choose
+    about: Report runtime, reactivity, template, form, and MPA Boost behavior in the core repository.
+  - name: GyosJS API reference
+    url: https://gyosjs.dev/api-reference
+    about: Confirm the runtime contract before reporting editor behavior.

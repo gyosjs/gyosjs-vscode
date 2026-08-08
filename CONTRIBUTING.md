@@ -2,6 +2,8 @@
 
 Bug reports and focused pull requests are welcome. Before changing editor behavior, confirm that the behavior is part of the current public GyosJS runtime contract rather than an undocumented demo or an experimental implementation detail.
 
+Maintainers should also follow `MAINTAINING.md` for compatibility, contract synchronization, triage, and registry release checks.
+
 ## Development Setup
 
 Use Node.js 20 or newer:
