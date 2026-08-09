@@ -10,6 +10,7 @@ The extension helps you write GyosJS templates without requiring a framework-spe
 
 - Syntax highlighting for GyosJS directives, structural directives, event handlers, bindings, interpolations, and auto-scope attributes.
 - Attribute completion for the full built-in template and MPA Boost API.
+- Generic reactive attribute support for ARIA, data, form metadata, and custom attributes.
 - Value completion for transitions, validators, hydration strategies, swap modes, HTTP methods, bindings, events, and modifiers.
 - Hover documentation with a runnable syntax example and a link to the canonical GyosJS documentation.
 - Snippets for scopes, keyed loops, conditionals, validated forms, portals, boosted layouts, partial router actions, and persisted media.

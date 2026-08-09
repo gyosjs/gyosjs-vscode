@@ -2,6 +2,18 @@
 
 All notable changes to the GyosJS Visual Studio Code extension are documented here.
 
+## 0.1.1 - 2026-08-09
+
+### Added
+
+- Completions and hover contract coverage for common ARIA, data, and form metadata bindings introduced by GyosJS 0.2.0.
+
+### Fixed
+
+- Generic safe bindings no longer produce an unsupported-binding diagnostic.
+- `g-transition` used with `g-show` is now recognized as a valid transition target.
+- Unsafe executable and framework-owned dynamic attribute names remain diagnosed.
+
 ## 0.1.0 - 2026-08-06
 
 ### Added
