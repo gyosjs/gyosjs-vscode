@@ -1,4 +1,4 @@
-export const GYOS_CONTRACT_VERSION = '0.1';
+export const GYOS_CONTRACT_VERSION = '0.2';
 export const DOCS_BASE = 'https://github.com/gyosjs/gyosjs/blob/main/docs/en';
 
 export type AttributeKind =
@@ -58,7 +58,7 @@ export const DIRECTIVE_ATTRIBUTES = [
   definition('g-static', 'directive', 'Process this element once and freeze its GyosJS subtree.', '<h1 g-static>{title}</h1>', 'api-reference.md#g-static'),
   definition('g-ignore', 'directive', 'Leave this element and its entire subtree untouched by GyosJS.', '<div g-ignore>Third-party widget</div>', 'api-reference.md#g-ignore'),
   definition('g-key', 'directive', 'Provide stable identity for a *for row.', '<li *for="item in items" g-key="item.id">...</li>', 'api-reference.md#for', { valueRequired: true }),
-  definition('g-transition', 'directive', 'Animate structural enter and leave using a built-in or custom transition.', '<div *if="open" g-transition.300="fade">...</div>', 'api-reference.md#g-transition', { valueRequired: true }),
+  definition('g-transition', 'directive', 'Animate structural enter/leave or g-show visibility using a built-in or custom transition.', '<div g-show="open" g-transition.300="fade">...</div>', 'api-reference.md#g-transition', { valueRequired: true }),
   definition('g-portal', 'directive', 'Move a conditional element to a target elsewhere in the document.', '<div *if="open" g-portal="#modal-root">...</div>', 'api-reference.md#g-portal', { valueRequired: true }),
   definition('g-hydrate', 'directive', 'Delay mounting a g-scope until a hydration strategy activates.', '<aside g-scope="Sidebar" g-hydrate="visible">...</aside>', 'api-reference.md#g-hydrate', { values: ['idle', 'visible', 'interaction', 'media(max-width: 768px)'], valueRequired: true }),
   definition('g-provide', 'directive', 'Provide a JSON object to descendant scopes.', '<section g-provide=\'{"theme":"dark"}\'>...</section>', 'api-reference.md#g-provide', { valueRequired: true }),
@@ -95,7 +95,12 @@ export const ROUTER_ATTRIBUTES = [
   definition('g-script-wrap', 'router', 'Execute an inline page script in an isolated function scope.', '<script g-script-wrap>...</script>', 'layouts-scripts-lifecycle.md')
 ] as const;
 
-export const BINDING_ATTRIBUTES = ['class', 'style', 'disabled', 'readonly', 'checked', 'selected', 'value', 'src', 'href', 'alt', 'title'] as const;
+export const BINDING_ATTRIBUTES = [
+  'class', 'style', 'disabled', 'readonly', 'checked', 'selected', 'required',
+  'value', 'name', 'min', 'max', 'minlength', 'maxlength', 'pattern', 'autocomplete',
+  'src', 'href', 'alt', 'title', 'role', 'tabindex',
+  'aria-expanded', 'aria-current', 'aria-hidden', 'data-state'
+] as const;
 export const COMMON_EVENTS = ['click', 'input', 'change', 'submit', 'keydown', 'keyup', 'keypress', 'focus', 'blur', 'mouseenter', 'mouseleave'] as const;
 export const EVENT_MODIFIERS = ['prevent', 'stop', 'once', 'capture', 'passive', 'debounce', 'outside', 'global'] as const;
 export const KEY_MODIFIERS = ['enter', 'esc', 'escape', 'space', 'up', 'down', 'left', 'right', 'delete', 'tab'] as const;
@@ -124,7 +129,7 @@ export function findDefinition(attributeName: string): AttributeDefinition | und
   if (lower.startsWith('g-transition.')) return exactDefinitions.get('g-transition');
   if (lower.startsWith('g-on:')) return exactDefinitions.get('g-on');
   if (lower.startsWith(':') && lower.length > 1) {
-    return definition(':attribute', 'binding', 'Reactively bind an allowed HTML attribute.', '<a :href="url">Open</a>', 'api-reference.md#attribute-bindings');
+    return definition(':attribute', 'binding', 'Reactively bind a safe HTML, ARIA, data, form, or custom attribute.', '<button :aria-expanded="open">Menu</button>', 'api-reference.md#attribute-bindings');
   }
   if (lower.startsWith('@') && lower.length > 1) {
     return definition('@event', 'event', 'Run a scope method or expression for a DOM event.', '<button @click.prevent="submit">Save</button>', 'api-reference.md#events');

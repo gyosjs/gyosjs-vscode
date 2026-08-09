@@ -1,4 +1,4 @@
-import { ALL_DEFINITIONS, BINDING_ATTRIBUTES, MODEL_MODIFIERS } from './contract';
+import { ALL_DEFINITIONS, MODEL_MODIFIERS } from './contract';
 import { getAttribute, scanTemplate, type AttributeToken, type ElementToken } from './scanner';
 
 export type IssueSeverity = 'error' | 'warning';
@@ -18,6 +18,7 @@ export interface AnalyzeTemplateOptions {
 const structuralNames = new Set(ALL_DEFINITIONS.filter(item => item.kind === 'structural').map(item => item.name));
 const reactiveDirectiveNames = new Set(ALL_DEFINITIONS.filter(item => item.kind === 'directive').map(item => item.name));
 const activeUrlElements = new Set(['base', 'embed', 'iframe', 'link', 'object', 'script']);
+const urlAttributes = new Set(['action', 'background', 'cite', 'formaction', 'href', 'poster', 'src', 'xlink:href']);
 const unsafePathParts = new Set(['__proto__', 'prototype', 'constructor']);
 
 function rangeFor(attribute: AttributeToken): Pick<TemplateIssue, 'start' | 'end'> {
@@ -176,7 +177,9 @@ function validateAttribute(element: ElementToken, attribute: AttributeToken, iss
     }
   }
   if (name === 'g-transition' || name.startsWith('g-transition.')) {
-    if (!hasStructuralContext(element)) issues.push(issue(attribute, 'g-transition only runs inside a structural branch.', 'transition-without-structural', 'warning'));
+    if (!hasStructuralContext(element) && !getAttribute(element, 'g-show')) {
+      issues.push(issue(attribute, 'g-transition requires a structural branch or g-show.', 'transition-without-target', 'warning'));
+    }
   }
   if (name === 'g-portal' && !getAttribute(element, '*if')) {
     issues.push(issue(attribute, 'g-portal requires *if on the same element.', 'portal-without-if'));
@@ -211,9 +214,12 @@ function validateAttribute(element: ElementToken, attribute: AttributeToken, iss
   if (name.startsWith(':')) {
     if (element.tagName.startsWith('x-') || !hasReactiveContext(element)) return;
     const boundName = name.slice(1);
-    if (!BINDING_ATTRIBUTES.includes(boundName as typeof BINDING_ATTRIBUTES[number])) {
-      issues.push(issue(attribute, `GyosJS does not bind the "${boundName}" attribute.`, 'unsupported-binding'));
-    } else if ((boundName === 'href' || boundName === 'src') && activeUrlElements.has(element.tagName)) {
+    const frameworkOwned = boundName.startsWith('g-') || boundName.startsWith('gd-') || boundName.startsWith('gm-');
+    const executable = boundName.startsWith('on') || boundName === 'srcdoc' || boundName === 'xmlns';
+    if (!boundName || frameworkOwned || executable || /^[\s@:*]/.test(boundName)) {
+      issues.push(issue(attribute, `GyosJS blocks the unsafe or framework-owned "${boundName}" binding.`, 'blocked-binding'));
+    } else if ((urlAttributes.has(boundName) && activeUrlElements.has(element.tagName))
+      || (boundName === 'data' && element.tagName === 'object')) {
       issues.push(issue(attribute, `Reactive ${boundName} is blocked on active-content <${element.tagName}> elements.`, 'active-url-binding'));
     }
   }

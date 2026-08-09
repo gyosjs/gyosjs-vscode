@@ -64,7 +64,17 @@ describe('conservative template diagnostics', () => {
   it('does not diagnose custom directives or ignored subtrees', () => {
     const source = `<div g-custom="value" @custom-event="run" g-transition="custom"></div>
       <section g-ignore><input g-model.lazy="constructor.value"></section>`;
-    expect(codes(source)).toEqual(['transition-without-structural']);
+    expect(codes(source)).toEqual(['transition-without-target']);
+  });
+
+  it('accepts generic bindings and g-show transitions while blocking executable attributes', () => {
+    const source = `<section g-scope="Menu">
+      <button :aria-expanded="open" :data-state="state" :custom-state="state">Menu</button>
+      <input :name="fieldName" :required="required">
+      <aside g-show="open" g-transition.200="fade">Panel</aside>
+      <a :onclick="handler" :g-show="open">Unsafe</a>
+    </section>`;
+    expect(codes(source)).toEqual(['blocked-binding', 'blocked-binding']);
   });
 
   it('does not claim framework syntax outside a GyosJS reactive context', () => {
