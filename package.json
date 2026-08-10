@@ -2,7 +2,7 @@
   "name": "gyosjs",
   "displayName": "GyosJS",
   "description": "Syntax highlighting, IntelliSense, hovers, snippets, and diagnostics for GyosJS templates.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "publisher": "gyosjs",
   "preview": true,
   "license": "MIT",

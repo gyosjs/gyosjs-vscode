@@ -2,6 +2,17 @@
 
 All notable changes to the GyosJS Visual Studio Code extension are documented here.
 
+## 0.1.2 - 2026-08-10
+
+### Fixed
+
+- Workspace indexing no longer starts for unrelated HTML/PHP documents and now honors VS Code `files.exclude` rules.
+- Laravel framework caches, temporary Composer/PHPStan data, generated output, declaration files, and minified scripts are excluded by default.
+- Large files are skipped before reading or parsing, with a configurable `gyosjs.indexing.maxFileSizeKb` ceiling.
+- JavaScript symbol scanning now checks code offsets in linear time instead of repeatedly rescanning from the start of the source.
+- Workspace scans use bounded batches with event-loop yields, and unchanged open documents reuse their versioned index.
+- JavaScript symbol offsets remain correct when source text contains astral Unicode characters.
+
 ## 0.1.1 - 2026-08-09
 
 ### Added

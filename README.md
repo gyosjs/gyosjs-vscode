@@ -55,6 +55,12 @@ Open the Command Palette and run:
 
 Set `gyosjs.diagnostics.enabled` to `false` for a workspace or file scope to disable diagnostics without disabling completions and hovers.
 
+Workspace indexing starts lazily after GyosJS syntax is detected. It honors VS Code `files.exclude`, skips common dependency/cache/generated paths, and ignores `.min.js`, `.d.ts`, and files larger than 512 KiB by default.
+
+- Add project-specific path fragments to `gyosjs.indexing.exclude`.
+- Change `gyosjs.indexing.maxFileSizeKb` when authored GyosJS source legitimately exceeds the default limit.
+- Set `gyosjs.indexing.enabled` to `false` to disable cross-file indexing.
+
 ## Installation
 
 Install **GyosJS** from the Visual Studio Marketplace or Open VSX when the first preview is published. For local testing, build a VSIX and install it with **Extensions: Install from VSIX...**:
