@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { attributeAtOffset, elementAtOffset, getAttribute, scanTemplate, type AttributeToken, type ElementToken } from './scanner';
 import { identifierAt } from './symbols';
 import { scanContextAccesses, scanGyosCalls } from './symbols';
-import { indexSource, type IndexedFile, type IndexedSymbol, WorkspaceIndex } from './workspace-index';
+import { type IndexedFile, type IndexedSymbol, WorkspaceIndex } from './workspace-index';
 import { BUILTIN_PIPES, CONTEXT_APIS, FORM_CONTEXT_METHODS, GYOS_APIS, findContextApi, findGyosApi, type RuntimeApiDefinition } from './api';
 
 export const SEMANTIC_LEGEND = new vscode.SemanticTokensLegend(
@@ -21,8 +21,7 @@ const JS_WORDS = new Set([
 ]);
 
 function documentFile(document: vscode.TextDocument, index: WorkspaceIndex): IndexedFile {
-  index.updateDocument(document);
-  return index.file(document.uri) ?? indexSource(document.uri, document.getText());
+  return index.updateDocument(document);
 }
 
 function scopeContainer(element: ElementToken | null): string | null {

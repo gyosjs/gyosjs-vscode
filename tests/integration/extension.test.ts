@@ -60,7 +60,9 @@ export async function run(): Promise<void> {
   assert.ok(countElement, 'No template element owns the interpolation');
   assert.equal(getAttribute(countElement.parent ?? countElement, 'g-scope')?.value, 'Page');
   const directIndex = new WorkspaceIndex();
-  directIndex.updateDocument(smartDocument);
+  const firstIndex = directIndex.updateDocument(smartDocument);
+  const cachedIndex = directIndex.updateDocument(smartDocument);
+  assert.strictEqual(cachedIndex, firstIndex, 'Unchanged documents should reuse their parsed index');
   const directDefinitions = new GyosDefinitionProvider(directIndex).provideDefinition(smartDocument, countPosition);
   assert.ok(directDefinitions && (!Array.isArray(directDefinitions) || directDefinitions.length > 0));
   directIndex.dispose();

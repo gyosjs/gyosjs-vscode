@@ -62,7 +62,7 @@ interface Span {
 }
 
 function maskComments(source: string): string {
-  const chars = [...source];
+  const chars = source.split('');
   let index = 0;
   let quote: string | null = null;
   while (index < chars.length) {
@@ -99,15 +99,19 @@ function maskComments(source: string): string {
   return chars.join('');
 }
 
-function isCodeOffset(source: string, target: number): boolean {
+function codeOffsets(source: string): Uint8Array {
+  const offsets = new Uint8Array(source.length);
   let quote: string | null = null;
   let lineComment = false;
   let blockComment = false;
-  for (let index = 0; index < target; index++) {
+  for (let index = 0; index < source.length; index++) {
     const char = source[index];
     const next = source[index + 1];
     if (lineComment) {
-      if (char === '\n') lineComment = false;
+      if (char === '\n') {
+        lineComment = false;
+        offsets[index] = 1;
+      }
       continue;
     }
     if (blockComment) {
@@ -129,8 +133,9 @@ function isCodeOffset(source: string, target: number): boolean {
       blockComment = true;
       index++;
     } else if (char === '"' || char === "'" || char === '`') quote = char;
+    else offsets[index] = 1;
   }
-  return !quote && !lineComment && !blockComment;
+  return offsets;
 }
 
 function skipTrivia(source: string, offset: number): number {
@@ -238,6 +243,7 @@ export function scanObjectMembers(source: string, span: Span, container: string,
 
 export function scanJavaScriptSymbols(source: string, baseOffset = 0): GyosSymbol[] {
   const masked = maskComments(source);
+  const code = codeOffsets(source);
   const receivers = new Set(['Gyos']);
   const namedCalls = new Map<string, string>();
   const importPattern = /import\s+([\s\S]*?)\s+from\s+(['"])([^'"\r\n]*gyos[^'"\r\n]*)\2/g;
@@ -266,7 +272,7 @@ export function scanJavaScriptSymbols(source: string, baseOffset = 0): GyosSymbo
   const symbols: GyosSymbol[] = [];
   const callPattern = /\b(?:([A-Za-z_$][\w$]*)\s*\.\s*)?([A-Za-z_$][\w$]*)\s*\(\s*(['"])([^'"\r\n]+)\3\s*(?:,|\))/g;
   for (const match of masked.matchAll(callPattern)) {
-    if (!isCodeOffset(source, match.index ?? 0)) continue;
+    if (!code[match.index ?? 0]) continue;
     const receiver = match[1];
     const called = match[2];
     const method = receiver ? (receivers.has(receiver) ? called : null) : namedCalls.get(called) ?? null;
@@ -332,11 +338,12 @@ function collectGyosImports(source: string): { receivers: Set<string>; named: Ma
 
 export function scanGyosCalls(source: string, baseOffset = 0): GyosCall[] {
   const masked = maskComments(source);
+  const code = codeOffsets(source);
   const imports = collectGyosImports(masked);
   const calls: GyosCall[] = [];
   const globalPattern = /\b(?:([A-Za-z_$][\w$]*)\s*\.\s*)?([A-Za-z_$][\w$]*)\s*\(\s*(?:(['"])([^'"\r\n]*)\3)?/g;
   for (const match of masked.matchAll(globalPattern)) {
-    if (!isCodeOffset(source, match.index ?? 0)) continue;
+    if (!code[match.index ?? 0]) continue;
     const receiver = match[1];
     const called = match[2];
     const method = receiver ? (imports.receivers.has(receiver) ? called : null) : imports.named.get(called) ?? null;
@@ -356,7 +363,7 @@ export function scanGyosCalls(source: string, baseOffset = 0): GyosCall[] {
   }
   const contextPattern = /(?:\bthis\s*\.\s*)?(\$(?:inject|provide|emit|on|watch|effect))\s*\(\s*(?:(['"])([^'"\r\n]*)\2)?/g;
   for (const match of masked.matchAll(contextPattern)) {
-    if (!isCodeOffset(source, match.index ?? 0)) continue;
+    if (!code[match.index ?? 0]) continue;
     const full = match[0];
     const method = match[1];
     const methodOffset = full.indexOf(method);
@@ -376,10 +383,11 @@ export function scanGyosCalls(source: string, baseOffset = 0): GyosCall[] {
 
 export function scanContextAccesses(source: string, baseOffset = 0): ContextAccess[] {
   const masked = maskComments(source);
+  const code = codeOffsets(source);
   const result: ContextAccess[] = [];
   const pattern = /(?:\bthis\s*\.\s*)?(\$(?:refs|inject|provide|emit|on|watch|effect|index|event))(?:\s*\.\s*([A-Za-z_$][\w$]*))?/g;
   for (const match of masked.matchAll(pattern)) {
-    if (!isCodeOffset(source, match.index ?? 0)) continue;
+    if (!code[match.index ?? 0]) continue;
     const full = match[0];
     const name = match[1];
     const member = match[2];

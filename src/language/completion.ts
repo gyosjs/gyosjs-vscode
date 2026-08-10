@@ -83,7 +83,9 @@ export class GyosCompletionProvider implements vscode.CompletionItemProvider {
   provideCompletionItems(document: vscode.TextDocument, position: vscode.Position): vscode.CompletionItem[] {
     const source = document.getText();
     const offset = document.offsetAt(position);
-    const scan = scanTemplate(source);
+    const indexed = this.index.updateDocument(document);
+    if (indexed.skipReason === 'excluded' || indexed.skipReason === 'too-large') return [];
+    const scan = indexed.scan ?? scanTemplate(source);
     const context = attributeAtOffset(scan, offset);
 
     if (context && context.attribute.valueStart !== null && offset >= context.attribute.valueStart) {

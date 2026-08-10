@@ -97,7 +97,14 @@
           "default": [],
           "scope": "window",
           "items": { "type": "string" },
-          "description": "Additional path fragments excluded from the GyosJS workspace index."
+          "description": "Additional path fragments excluded from the GyosJS workspace index. VS Code files.exclude rules and common dependency, cache, generated, declaration, and minified paths are excluded automatically."
+        },
+        "gyosjs.indexing.maxFileSizeKb": {
+          "type": "number",
+          "default": 512,
+          "minimum": 64,
+          "scope": "window",
+          "description": "Maximum source file size in KiB for GyosJS indexing. Larger files are skipped to keep the extension host responsive."
         },
         "gyosjs.mpa.staticRouteValidation": {
           "type": "boolean",

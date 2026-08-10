@@ -11,6 +11,7 @@ import {
 import { GYOS_DOCUMENT_SELECTOR, isSupportedDocument } from './language/selectors';
 import { WorkspaceIndex } from './language/workspace-index';
 import { runMpaAudit } from './language/mpa-audit';
+import { hasGyosSourceHint } from './language/index-policy';
 
 const DOCS_ROOT = 'https://github.com/gyosjs/gyosjs/tree/main/docs/en';
 
@@ -25,13 +26,17 @@ export function activate(context: vscode.ExtensionContext): void {
   const mpaAuditOutput = vscode.window.createOutputChannel('GyosJS MPA Audit');
 
   const updateDiagnostics = (document: vscode.TextDocument): void => {
-    if (!isSupportedDocument(document) || !diagnosticsEnabled(document)) {
+    const supported = isSupportedDocument(document);
+    const source = supported ? document.getText() : '';
+    const hasGyos = supported && hasGyosSourceHint(document.fileName, source, true);
+    if (hasGyos) void index.initialize();
+    if (!supported || !diagnosticsEnabled(document) || !hasGyos) {
       diagnostics.delete(document.uri);
       return;
     }
     index.updateDocument(document);
     const fullDocument = ['html', 'htm'].some(extension => document.fileName.toLowerCase().endsWith(`.${extension}`));
-    const issues = analyzeTemplate(document.getText(), { fullDocument });
+    const issues = analyzeTemplate(source, { fullDocument });
     const items = issues.map(item => new vscode.Diagnostic(
       new vscode.Range(document.positionAt(item.start), document.positionAt(item.end)),
       item.message,
@@ -51,7 +56,7 @@ export function activate(context: vscode.ExtensionContext): void {
     timers.set(key, setTimeout(() => {
       timers.delete(key);
       updateDiagnostics(document);
-    }, 150));
+    }, 250));
   };
 
   const open = (path: string): Thenable<boolean> => vscode.env.openExternal(vscode.Uri.parse(`${DOCS_ROOT}/${path}`));
@@ -88,12 +93,14 @@ export function activate(context: vscode.ExtensionContext): void {
       for (const document of vscode.workspace.textDocuments) index.updateDocument(document);
       void vscode.window.showInformationMessage('GyosJS workspace index rebuilt.');
     }),
-    vscode.commands.registerCommand('gyosjs.auditMpaBoost', () => runMpaAudit(index, mpaAuditOutput)),
+    vscode.commands.registerCommand('gyosjs.auditMpaBoost', async () => {
+      await index.initialize();
+      runMpaAudit(index, mpaAuditOutput);
+    }),
     { dispose: () => timers.forEach(timer => clearTimeout(timer)) }
   );
 
   for (const document of vscode.workspace.textDocuments) updateDiagnostics(document);
-  void index.initialize();
 }
 
 export function deactivate(): void {}

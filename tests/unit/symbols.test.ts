@@ -33,6 +33,13 @@ describe('GyosJS symbol scanner', () => {
     ]));
   });
 
+  it('preserves UTF-16 offsets when source contains astral characters', () => {
+    const source = `const icon = "😀"; Gyos.scope('Page', { ready: true });`;
+    const scope = scanJavaScriptSymbols(source).find(symbol => symbol.kind === 'scope');
+
+    expect(scope?.start).toBe(source.indexOf('Page'));
+  });
+
   it('links DI keys, event channels, and component context accesses', () => {
     const source = `
       Gyos.provide('theme', 'dark');
@@ -51,4 +58,17 @@ describe('GyosJS symbol scanner', () => {
     expect(scanGyosCalls(source).some(call => call.method === '$inject' && call.argument === 'localTheme')).toBe(true);
     expect(scanContextAccesses(source).some(access => access.name === '$refs' && access.member === 'description')).toBe(true);
   });
+
+  it('keeps call-heavy generated sources within a linear scan budget', () => {
+    const source = Array.from(
+      { length: 6000 },
+      (_, index) => `const value${index} = "factory${index}('not-gyos')";`
+    ).join('\n');
+    const started = performance.now();
+    const symbols = scanJavaScriptSymbols(source);
+    const elapsed = performance.now() - started;
+
+    expect(symbols).toEqual([]);
+    expect(elapsed).toBeLessThan(1500);
+  }, 5000);
 });
