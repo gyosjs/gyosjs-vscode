@@ -135,7 +135,8 @@ function validateAttribute(element: ElementToken, attribute: AttributeToken, iss
   const name = attribute.name.toLowerCase();
   const definition = ALL_DEFINITIONS.find(candidate => candidate.name === name)
     ?? (name.startsWith('g-model.') ? ALL_DEFINITIONS.find(candidate => candidate.name === 'g-model') : undefined)
-    ?? (name.startsWith('g-transition.') ? ALL_DEFINITIONS.find(candidate => candidate.name === 'g-transition') : undefined);
+    ?? (name.startsWith('g-transition.') ? ALL_DEFINITIONS.find(candidate => candidate.name === 'g-transition') : undefined)
+    ?? (name.startsWith('g-reveal:') ? ALL_DEFINITIONS.find(candidate => candidate.name === 'g-reveal') : undefined);
 
   if (definition?.valueRequired && (!attribute.value || !attribute.value.trim())) {
     issues.push(issue(attribute, `${definition.name} requires a non-empty value.`, 'missing-value'));

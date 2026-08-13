@@ -106,6 +106,11 @@ export class GyosCompletionProvider implements vscode.CompletionItemProvider {
       const range = new vscode.Range(document.positionAt(modifierStart), position);
       return modifierItems(fragment.startsWith('g-model.') ? MODEL_MODIFIERS : ['250', '300', '500', '750', '1000'], range);
     }
+    if (fragment.startsWith('g-reveal:')) {
+      const modifierStart = current.start + fragment.lastIndexOf(':') + 1;
+      const range = new vscode.Range(document.positionAt(modifierStart), position);
+      return modifierItems(['repeat', 'parent'], range);
+    }
     if (fragment.startsWith('@') && fragment.includes('.')) {
       const eventName = fragment.slice(1).split('.')[0];
       const modifiers = eventName.startsWith('key')

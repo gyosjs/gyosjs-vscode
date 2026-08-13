@@ -24,7 +24,7 @@
           "name": "keyword.control.gyosjs"
         },
         {
-          "match": "(?<![\\w-])(g-(?:scope(?:-persist)?|model(?:\\.\\d+|\\.[\\w-]+)*|show|text|html|ref|static|ignore|key|transition(?:\\.\\d+)?|portal|hydrate|provide|form|submit|validate|errors|cloak|focus|tooltip|markdown|on(?::[\\w-]+)?|ignore-outside-click|boost|no-boost|outlet|target|swap|preload|snapshot|persist|current-head|change-state|current-state|noscroll|router-spin|router-link|router-method|router-params|script-once|script-wrap))(?=\\s*=|\\s|/?>)",
+          "match": "(?<![\\w-])(g-(?:scope(?:-persist)?|model(?:\\.\\d+|\\.[\\w-]+)*|show|text|html|ref|static|ignore|key|transition(?:\\.\\d+)?|portal|hydrate|reveal(?::[\\w-]+)*|provide|form|submit|validate|errors|cloak|focus|tooltip|markdown|on(?::[\\w-]+)?|ignore-outside-click|boost|no-boost|outlet|target|swap|preload|snapshot|persist|current-head|change-state|current-state|noscroll|router-spin|router-link|router-method|router-params|script-once|script-wrap))(?=\\s*=|\\s|/?>)",
           "name": "entity.other.attribute-name.gyosjs"
         },
         {
@@ -42,7 +42,7 @@
       ]
     },
     "expression-double": {
-      "begin": "(?<![\\w-])((?:g-(?:scope|model(?:\\.\\d+|\\.[\\w-]+)*|show|text|html|key|transition(?:\\.\\d+)?|portal|hydrate|tooltip|markdown|on(?::[\\w-]+)?|submit|validate|errors|router-params)|\\*(?:if|elseif|for|switch|case|await|then|catch)|@[A-Za-z][\\w:-]*(?:\\.(?:[\\w-]+|\\d+))*|:[A-Za-z][\\w-]*|gd-[\\w-]+|gm-[\\w-]+(?::[\\w-]+)*))\\s*=\\s*(\")",
+      "begin": "(?<![\\w-])((?:g-(?:scope|model(?:\\.\\d+|\\.[\\w-]+)*|show|text|html|key|transition(?:\\.\\d+)?|portal|hydrate|reveal(?::[\\w-]+)*|tooltip|markdown|on(?::[\\w-]+)?|submit|validate|errors|router-params)|\\*(?:if|elseif|for|switch|case|await|then|catch)|@[A-Za-z][\\w:-]*(?:\\.(?:[\\w-]+|\\d+))*|:[A-Za-z][\\w-]*|gd-[\\w-]+|gm-[\\w-]+(?::[\\w-]+)*))\\s*=\\s*(\")",
       "beginCaptures": {
         "1": {
           "name": "entity.other.attribute-name.gyosjs"
@@ -65,7 +65,7 @@
       ]
     },
     "expression-single": {
-      "begin": "(?<![\\w-])((?:g-(?:scope|model(?:\\.\\d+|\\.[\\w-]+)*|show|text|html|key|transition(?:\\.\\d+)?|portal|hydrate|tooltip|markdown|on(?::[\\w-]+)?|submit|validate|errors|router-params)|\\*(?:if|elseif|for|switch|case|await|then|catch)|@[A-Za-z][\\w:-]*(?:\\.(?:[\\w-]+|\\d+))*|:[A-Za-z][\\w-]*|gd-[\\w-]+|gm-[\\w-]+(?::[\\w-]+)*))\\s*=\\s*(')",
+      "begin": "(?<![\\w-])((?:g-(?:scope|model(?:\\.\\d+|\\.[\\w-]+)*|show|text|html|key|transition(?:\\.\\d+)?|portal|hydrate|reveal(?::[\\w-]+)*|tooltip|markdown|on(?::[\\w-]+)?|submit|validate|errors|router-params)|\\*(?:if|elseif|for|switch|case|await|then|catch)|@[A-Za-z][\\w:-]*(?:\\.(?:[\\w-]+|\\d+))*|:[A-Za-z][\\w-]*|gd-[\\w-]+|gm-[\\w-]+(?::[\\w-]+)*))\\s*=\\s*(')",
       "beginCaptures": {
         "1": {
           "name": "entity.other.attribute-name.gyosjs"

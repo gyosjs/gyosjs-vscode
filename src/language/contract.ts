@@ -61,6 +61,7 @@ export const DIRECTIVE_ATTRIBUTES = [
   definition('g-transition', 'directive', 'Animate structural enter/leave or g-show visibility using a built-in or custom transition.', '<div g-show="open" g-transition.300="fade">...</div>', 'api-reference.md#g-transition', { valueRequired: true }),
   definition('g-portal', 'directive', 'Move a conditional element to a target elsewhere in the document.', '<div *if="open" g-portal="#modal-root">...</div>', 'api-reference.md#g-portal', { valueRequired: true }),
   definition('g-hydrate', 'directive', 'Delay mounting a g-scope until a hydration strategy activates.', '<aside g-scope="Sidebar" g-hydrate="visible">...</aside>', 'api-reference.md#g-hydrate', { values: ['idle', 'visible', 'interaction', 'media(max-width: 768px)'], valueRequired: true }),
+  definition('g-reveal', 'directive', 'Mark an element when it enters the viewport; application CSS owns the animation.', '<article g-reveal>Project card</article>', 'api-reference.md#g-reveal'),
   definition('g-provide', 'directive', 'Provide a JSON object to descendant scopes.', '<section g-provide=\'{"theme":"dark"}\'>...</section>', 'api-reference.md#g-provide', { valueRequired: true }),
   definition('g-form', 'directive', 'Expose reactive validation state for a form.', '<form g-form="signupForm">...</form>', 'api-reference.md#g-form-g-validate-g-errors', { tags: ['form'], valueRequired: true }),
   definition('g-submit', 'directive', 'Call a scope method after a g-form passes validation.', '<form g-form="signupForm" g-submit="saveAccount">...</form>', 'api-reference.md#g-submit', { tags: ['form'], valueRequired: true }),
@@ -127,6 +128,7 @@ export function findDefinition(attributeName: string): AttributeDefinition | und
 
   if (lower.startsWith('g-model.')) return exactDefinitions.get('g-model');
   if (lower.startsWith('g-transition.')) return exactDefinitions.get('g-transition');
+  if (lower.startsWith('g-reveal:')) return exactDefinitions.get('g-reveal');
   if (lower.startsWith('g-on:')) return exactDefinitions.get('g-on');
   if (lower.startsWith(':') && lower.length > 1) {
     return definition(':attribute', 'binding', 'Reactively bind a safe HTML, ARIA, data, form, or custom attribute.', '<button :aria-expanded="open">Menu</button>', 'api-reference.md#attribute-bindings');

@@ -19,6 +19,8 @@ describe('GyosJS language contract', () => {
     expect(findDefinition('g-model.debounce.300')?.name).toBe('g-model');
     expect(findDefinition('g-scope-persist')?.name).toBe('g-scope-persist');
     expect(findDefinition('g-transition.500')?.name).toBe('g-transition');
+    expect(findDefinition('g-reveal')?.name).toBe('g-reveal');
+    expect(findDefinition('g-reveal:repeat:parent')?.name).toBe('g-reveal');
     expect(findDefinition('@keydown.enter')?.kind).toBe('event');
     expect(findDefinition(':class')?.kind).toBe('binding');
     expect(findDefinition(':aria-expanded')?.description).toContain('ARIA');
