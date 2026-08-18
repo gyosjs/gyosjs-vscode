@@ -13,10 +13,10 @@ The extension helps you write GyosJS templates without requiring a framework-spe
 - Generic reactive attribute support for ARIA, data, form metadata, and custom attributes.
 - Value completion for transitions, validators, hydration strategies, swap modes, HTTP methods, bindings, events, and modifiers.
 - Hover documentation with a runnable syntax example and a link to the canonical GyosJS documentation.
-- Snippets for scopes, keyed loops, conditionals, validated forms, portals, boosted layouts, partial router actions, and persisted media.
+- Snippets for scopes, keyed loops, conditionals, validated forms, reveals, portals, boosted layouts, partial router actions, persisted media, and strict-CSP CDN setup.
 - Conservative diagnostics for deterministic contract mistakes such as orphan branches, malformed `*for`, invalid modifiers, unsafe model paths, and missing companion directives.
 - Workspace-aware semantic highlighting, completion, hover, Ctrl+Click, and references for scopes, members, aliases, refs, and GyosJS registries.
-- Runtime API and component-context IntelliSense for inline scripts and expressions, including `Gyos.provide/inject`, event channels, `$refs`, `$inject`, `$emit`, `$on`, `$watch`, and form-state helpers.
+- Runtime API and component-context IntelliSense for inline scripts and expressions, including `Gyos.provide/inject`, `Gyos.setCspNonce`, event channels, `$refs`, `$inject`, `$emit`, `$on`, `$watch`, and form-state helpers.
 - Cross-template navigation for dependency keys, `g-on:*` channels, `g-ref` members, `*for` sources/aliases, custom transitions, validators, and pipes.
 - MPA Boost target navigation, static HTML route navigation, persist references, and a `GyosJS: Audit MPA Boost` workspace command.
 
@@ -45,6 +45,12 @@ GyosJS deliberately supports custom directives, validators, transitions, and DOM
 
 Add `g-ignore` to a subtree when GyosJS should not process it. The extension follows the same boundary and suppresses GyosJS diagnostics inside that subtree.
 
+## Runtime Compatibility
+
+Extension `0.2.x` tracks the public template and runtime contract of GyosJS `0.3.x`, including `g-reveal`, generic reactive attributes, `g-show` transitions, and the optional strict-CSP distribution.
+
+The standard and CSP builds use the same template attributes, so highlighting, completion, hover, and navigation work for both. The CSP build intentionally accepts a smaller expression language. The extension does not execute expressions or attempt full CSP-expression validation; use the CSP compatibility table in the GyosJS documentation when authoring strict-CSP templates.
+
 ## Commands And Settings
 
 Open the Command Palette and run:
@@ -63,7 +69,7 @@ Workspace indexing starts lazily after GyosJS syntax is detected. It honors VS C
 
 ## Installation
 
-Install **GyosJS** from the Visual Studio Marketplace or Open VSX when the first preview is published. For local testing, build a VSIX and install it with **Extensions: Install from VSIX...**:
+Install **GyosJS** from the Visual Studio Marketplace or Open VSX. For local testing, build a VSIX and install it with **Extensions: Install from VSIX...**:
 
 ```bash
 npm ci
