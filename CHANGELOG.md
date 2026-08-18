@@ -2,6 +2,23 @@
 
 All notable changes to the GyosJS Visual Studio Code extension are documented here.
 
+## 0.2.0 - 2026-08-18
+
+### Added
+
+- Language contract coverage for GyosJS 0.3.x, including completion and hover for `Gyos.setCspNonce()` and `Gyos.version`.
+- Snippets for built-in `g-reveal` and strict-CSP CDN setup with the required static runtime stylesheet.
+- CSP entry-point coverage for default and named GyosJS imports.
+
+### Changed
+
+- Runtime API descriptions now document the optional `Gyos.inject()` fallback and element-aware `Gyos.getTransitionConfig()` signature.
+- README compatibility guidance distinguishes standard expressions from the restricted strict-CSP expression language.
+
+### Fixed
+
+- The validated-form snippet now calls the form-state signal as `$invalid()` and no longer disables MPA Boost as an obsolete validation workaround.
+
 ## 0.1.2 - 2026-08-10
 
 ### Fixed
