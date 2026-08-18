@@ -134,6 +134,27 @@ export async function run(): Promise<void> {
   );
   assert.ok(apiCompletions.items.some(item => item.label === 'provide'));
   assert.ok(apiCompletions.items.some(item => item.label === 'emit'));
+  assert.ok(apiCompletions.items.some(item => item.label === 'setCspNonce'));
+  const versionCompletion = apiCompletions.items.find(item => item.label === 'version');
+  assert.ok(versionCompletion);
+  assert.equal(versionCompletion.kind, vscode.CompletionItemKind.Property);
+
+  const cspDocument = await vscode.workspace.openTextDocument({
+    language: 'html',
+    content: '<script type="module">import CspGyos from \'gyosjs/csp\'; CspGyos.setCspNonce(() => document.querySelector(\'meta[name="csp-nonce"]\')?.content);</script>'
+  });
+  const cspOffset = cspDocument.getText().indexOf('setCspNonce') + 3;
+  const cspHover = await vscode.commands.executeCommand<vscode.Hover[]>(
+    'vscode.executeHoverProvider', cspDocument.uri, cspDocument.positionAt(cspOffset)
+  );
+  assert.ok(cspHover.length > 0, 'Aliased setCspNonce hover is missing for the CSP entry');
+
+  const versionDocument = await vscode.workspace.openTextDocument({ language: 'html', content: '<span g-text="Gyos.version"></span>' });
+  const versionOffset = versionDocument.getText().indexOf('version') + 2;
+  const versionHover = await vscode.commands.executeCommand<vscode.Hover[]>(
+    'vscode.executeHoverProvider', versionDocument.uri, versionDocument.positionAt(versionOffset)
+  );
+  assert.ok(versionHover.length > 0, 'Gyos.version property hover is missing');
   const providerCompletionOffset = examplesDocument.getText().indexOf("$inject('theme')") + "$inject('th".length;
   const providerItems = await vscode.commands.executeCommand<vscode.CompletionList>(
     'vscode.executeCompletionItemProvider', examplesDocument.uri, examplesDocument.positionAt(providerCompletionOffset)

@@ -571,7 +571,10 @@ export function contextualCompletions(document: vscode.TextDocument, position: v
 }
 
 function apiCompletion(definition: RuntimeApiDefinition, kind: vscode.CompletionItemKind): vscode.CompletionItem {
-  const item = new vscode.CompletionItem(definition.name, kind);
+  const item = new vscode.CompletionItem(
+    definition.name,
+    definition.signature.includes('(') ? kind : vscode.CompletionItemKind.Property
+  );
   item.detail = definition.signature;
   item.documentation = apiMarkdown(definition);
   return item;
@@ -679,6 +682,11 @@ export function symbolHover(document: vscode.TextDocument, position: vscode.Posi
   }
   const token = identifierAt(document.getText(), offset);
   if (!token) return null;
+  const apiPrefix = document.getText().slice(Math.max(0, token.start - 24), token.start);
+  if (/\bGyos\s*\.\s*$/.test(apiPrefix)) {
+    const definition = findGyosApi(token.name);
+    if (definition) return new vscode.Hover(apiMarkdown(definition), new vscode.Range(document.positionAt(token.start), document.positionAt(token.end)));
+  }
   const contextDefinition = findContextApi(token.name);
   if (contextDefinition) return new vscode.Hover(apiMarkdown(contextDefinition), new vscode.Range(document.positionAt(token.start), document.positionAt(token.end)));
   const before = document.getText().slice(Math.max(0, token.start - 12), token.start);

@@ -7,12 +7,21 @@ import {
   VALIDATORS,
   findDefinition
 } from '../../src/language/contract';
+import { GYOS_APIS } from '../../src/language/api';
 
 describe('GyosJS language contract', () => {
   it('keeps exact built-in names unique', () => {
     const names = ALL_DEFINITIONS.map(definition => definition.name);
     expect(new Set(names).size).toBe(names.length);
-    expect(GYOS_CONTRACT_VERSION).toBe('0.2');
+    expect(GYOS_CONTRACT_VERSION).toBe('0.3');
+  });
+
+  it('covers the GyosJS 0.3 CSP public surface', () => {
+    expect(GYOS_APIS.find(api => api.name === 'setCspNonce')).toMatchObject({
+      signature: 'Gyos.setCspNonce(valueOrResolver?)',
+      docs: 'content-security-policy.md'
+    });
+    expect(GYOS_APIS.find(api => api.name === 'version')?.signature).toBe('Gyos.version');
   });
 
   it('covers dynamic GyosJS attribute families', () => {

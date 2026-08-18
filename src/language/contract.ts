@@ -1,4 +1,4 @@
-export const GYOS_CONTRACT_VERSION = '0.2';
+export const GYOS_CONTRACT_VERSION = '0.3';
 export const DOCS_BASE = 'https://github.com/gyosjs/gyosjs/blob/main/docs/en';
 
 export type AttributeKind =

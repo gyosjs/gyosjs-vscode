@@ -33,6 +33,16 @@ describe('GyosJS symbol scanner', () => {
     ]));
   });
 
+  it('recognizes APIs imported from strict-CSP entry points', () => {
+    const calls = scanGyosCalls(`
+      import CspGyos, { setCspNonce as configureNonce } from 'gyosjs/csp';
+      CspGyos.setCspNonce('request-nonce');
+      configureNonce(() => 'next-nonce');
+    `);
+
+    expect(calls.filter(call => call.method === 'setCspNonce')).toHaveLength(2);
+  });
+
   it('preserves UTF-16 offsets when source contains astral characters', () => {
     const source = `const icon = "😀"; Gyos.scope('Page', { ready: true });`;
     const scope = scanJavaScriptSymbols(source).find(symbol => symbol.kind === 'scope');

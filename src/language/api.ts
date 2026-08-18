@@ -21,7 +21,7 @@ export const GYOS_APIS: readonly RuntimeApiDefinition[] = [
   api('directive', 'Gyos.directive(name, definition)', 'Register a custom g-* directive.'),
   api('pipe', 'Gyos.pipe(name, transform)', 'Register a template pipe.'),
   api('provide', 'Gyos.provide(key, value)', 'Register a global dependency.'),
-  api('inject', 'Gyos.inject(key)', 'Read a dependency registered globally with Gyos.provide().'),
+  api('inject', 'Gyos.inject(key, defaultValue?)', 'Read a dependency registered globally with Gyos.provide(), or return the optional default.'),
   api('getGlobalContainer', 'Gyos.getGlobalContainer()', 'Return the global dependency container.'),
   api('store', 'Gyos.store(name, definition?)', 'Register or read a global reactive store.'),
   api('hasStore', 'Gyos.hasStore(name)', 'Check whether a global store exists.'),
@@ -46,7 +46,7 @@ export const GYOS_APIS: readonly RuntimeApiDefinition[] = [
   api('unref', 'Gyos.unref(value)', 'Read a signal/computed value or return a plain value unchanged.'),
   api('untrack', 'Gyos.untrack(callback)', 'Run code without collecting reactive dependencies.'),
   api('registerTransition', 'Gyos.registerTransition(name, config)', 'Register a named structural transition.'),
-  api('getTransitionConfig', 'Gyos.getTransitionConfig(name)', 'Return a transition configuration.'),
+  api('getTransitionConfig', 'Gyos.getTransitionConfig(nameOrElement)', 'Return a transition configuration by name, or read a transition and duration modifier from an element.'),
   api('useFetch', 'Gyos.useFetch(url, options?)', 'Create reactive fetch state.'),
   api('useCounter', 'Gyos.useCounter(initialValue?)', 'Create reusable counter state and actions.'),
   api('useToggle', 'Gyos.useToggle(initialValue?)', 'Create reusable boolean toggle state.'),
@@ -65,11 +65,13 @@ export const GYOS_APIS: readonly RuntimeApiDefinition[] = [
   api('ready', 'Gyos.ready(callback)', 'Run a callback when the document is ready.'),
   api('applyDirective', 'Gyos.applyDirective(element, name, value, scope?)', 'Apply a registered directive manually.'),
   api('applyTransitionStyles', 'Gyos.applyTransitionStyles()', 'Install transition styles used by built-in transitions.'),
+  api('setCspNonce', 'Gyos.setCspNonce(valueOrResolver?)', 'Configure the active CSP nonce used for scripts recreated by MPA Boost.', 'content-security-policy.md'),
   api('startRouter', 'Gyos.startRouter(options?)', 'Start MPA Boost when g-boost is present.', 'mpa-boost-deep-dive.md'),
   api('onBeforeNavigate', 'Gyos.onBeforeNavigate(callback)', 'Subscribe to accepted MPA navigations before loading.', 'mpa-boost-deep-dive.md'),
   api('onAfterNavigate', 'Gyos.onAfterNavigate(callback)', 'Subscribe after an MPA navigation commits.', 'mpa-boost-deep-dive.md'),
   api('portalCreate', 'Gyos.portalCreate(element, target)', 'Move an element into a portal target.'),
-  api('portalDestroy', 'Gyos.portalDestroy(element)', 'Restore or destroy a portal element.')
+  api('portalDestroy', 'Gyos.portalDestroy(element)', 'Restore or destroy a portal element.'),
+  api('version', 'Gyos.version', 'Current GyosJS runtime version.')
 ];
 
 export const CONTEXT_APIS: readonly RuntimeApiDefinition[] = [
