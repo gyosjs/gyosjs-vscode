@@ -31,10 +31,10 @@
     "prefix": "gyos-form",
     "description": "Create a GyosJS validated form.",
     "body": [
-      "<form g-scope g-form=\"${1:formState}\" g-submit=\"${2:submit}\" g-no-boost>",
+      "<form g-scope g-form=\"${1:formState}\" g-submit=\"${2:submit}\">",
       "  <input g-model=\"${3:email}\" g-validate=\"required|email\" name=\"${3:email}\">",
       "  <div g-errors=\"${1:formState}\"></div>",
-      "  <button type=\"submit\" :disabled=\"${1:formState}.\\$invalid\">${4:Submit}</button>",
+      "  <button type=\"submit\" :disabled=\"${1:formState}.\\$invalid()\">${4:Submit}</button>",
       "</form>"
     ]
   },
@@ -80,6 +80,23 @@
       "<audio g-persist=\"${1:player}\" controls>",
       "  <source src=\"${2:/media/audio.mp3}\" type=\"${3:audio/mpeg}\">",
       "</audio>"
+    ]
+  },
+  "GyosJS Reveal": {
+    "prefix": "gyos-reveal",
+    "description": "Reveal an element when it enters the viewport.",
+    "body": [
+      "<${1:section} g-reveal${2|,:repeat,:parent|}>",
+      "  ${3:Content}",
+      "</${1:section}>"
+    ]
+  },
+  "GyosJS Strict CSP CDN": {
+    "prefix": "gyos-csp-cdn",
+    "description": "Load the GyosJS strict-CSP auto build and its static runtime styles.",
+    "body": [
+      "<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/gyosjs@0.3.0/dist/gyos.css\">",
+      "<script nonce=\"${1:CSP_NONCE}\" src=\"https://cdn.jsdelivr.net/npm/gyosjs@0.3.0/dist/gyos.csp.auto.min.js\" defer></script>"
     ]
   }
 }

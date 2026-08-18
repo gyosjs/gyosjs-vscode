@@ -45,6 +45,17 @@ describe('extension manifest assets', () => {
     expect(snippets.every(snippet => snippet.body.length > 0)).toBe(true);
   });
 
+  it('ships current form, reveal, and strict-CSP snippets', () => {
+    const snippets = Object.values(readJson<Record<string, Snippet>>('snippets/gyos.code-snippets'));
+    const byPrefix = new Map(snippets.map(snippet => [snippet.prefix, snippet.body.join('\n')]));
+
+    expect(byPrefix.get('gyos-form')).toContain('$invalid()');
+    expect(byPrefix.get('gyos-form')).not.toContain('g-no-boost');
+    expect(byPrefix.get('gyos-reveal')).toContain('g-reveal');
+    expect(byPrefix.get('gyos-csp-cdn')).toContain('gyos.csp.auto.min.js');
+    expect(byPrefix.get('gyos-csp-cdn')).toContain('gyos.css');
+  });
+
   it('points package contributions at tracked assets', () => {
     const manifest = readJson<Manifest>('package.json');
     const paths = [
