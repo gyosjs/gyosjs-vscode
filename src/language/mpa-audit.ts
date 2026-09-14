@@ -6,7 +6,8 @@ import type { IndexedFile, WorkspaceIndex } from './workspace-index';
 const ROUTER_ATTRIBUTES = new Set([
   'g-boost', 'g-no-boost', 'g-outlet', 'g-target', 'g-swap', 'g-preload', 'g-snapshot',
   'g-persist', 'g-current-head', 'g-change-state', 'g-current-state', 'g-noscroll',
-  'g-router-spin', 'g-router-link', 'g-router-method', 'g-router-params', 'g-script-once', 'g-script-wrap'
+  'g-router-spin', 'g-router-link', 'g-router-method', 'g-router-params', 'g-script-once', 'g-script-wrap',
+  'g-boost-errors', 'g-head-persist', 'g-router-remove'
 ]);
 
 function lineAt(source: string, offset: number): number {

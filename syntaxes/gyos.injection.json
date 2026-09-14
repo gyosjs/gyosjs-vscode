@@ -24,7 +24,7 @@
           "name": "keyword.control.gyosjs"
         },
         {
-          "match": "(?<![\\w-])(g-(?:scope(?:-persist)?|model(?:\\.\\d+|\\.[\\w-]+)*|show|text|html|ref|static|ignore|key|transition(?:\\.\\d+)?|portal|hydrate|reveal(?::[\\w-]+)*|provide|form|submit|validate|errors|cloak|focus|tooltip|markdown|on(?::[\\w-]+)?|ignore-outside-click|boost|no-boost|outlet|target|swap|preload|snapshot|persist|current-head|change-state|current-state|noscroll|router-spin|router-link|router-method|router-params|script-once|script-wrap))(?=\\s*=|\\s|/?>)",
+          "match": "(?<![\\w-])(g-(?:scope(?:-persist)?|model(?:\\.\\d+|\\.[\\w-]+)*|show|text|html|ref|static|ignore|key|transition(?:\\.\\d+)?|portal|hydrate|reveal(?::[\\w-]+)*|provide|form|submit|validate|errors|cloak|focus|tooltip|markdown|on(?::[\\w-]+)?|ignore-outside-click|boost(?:-errors)?|head-persist|no-boost|outlet|target|swap|preload|snapshot|persist|current-head|change-state|current-state|noscroll|router-spin|router-remove|router-link|router-method|router-params|script-once|script-wrap))(?=\\s*=|\\s|/?>)",
           "name": "entity.other.attribute-name.gyosjs"
         },
         {

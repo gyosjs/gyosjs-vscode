@@ -1,4 +1,4 @@
-export const GYOS_CONTRACT_VERSION = '0.3';
+export const GYOS_CONTRACT_VERSION = '0.4';
 export const DOCS_BASE = 'https://github.com/gyosjs/gyosjs/blob/main/docs/en';
 
 export type AttributeKind =
@@ -76,6 +76,9 @@ export const DIRECTIVE_ATTRIBUTES = [
 ] as const;
 
 export const ROUTER_ATTRIBUTES = [
+  definition('g-boost-errors', 'router', 'Render explicitly listed HTML error statuses without replaying the request or changing history.', '<form g-boost-errors="422">...</form>', 'api-reference.md#g-boost-errors', { valueRequired: true }),
+  definition('g-head-persist', 'router', 'Keep a keyed head node across navigation; the existing node and attributes win until reload or explicit removal.', '<script async src="/sdk.js" g-head-persist="analytics"></script>', 'api-reference.md#g-head-persist', { tags: ['script', 'style', 'link', 'meta'], valueRequired: true }),
+  definition('g-router-remove', 'router', 'Remove the trigger after a successful navigation commit, such as a consumed load-more link.', '<a href="/products?page=2" g-swap="append" g-router-remove>Load more</a>', 'api-reference.md#router-attributes-you-will-use-most'),
   definition('g-boost', 'router', 'Enable same-origin MPA Boost navigation for this element or subtree.', '<body g-boost>...</body>', 'mpa-boost-deep-dive.md'),
   definition('g-no-boost', 'router', 'Keep this element and subtree on native browser navigation.', '<a g-no-boost href="/download">Download</a>', 'mpa-boost-deep-dive.md#g-no-boost'),
   definition('g-outlet', 'router', 'Mark a target region that receives boosted HTML.', '<main id="app" g-outlet>...</main>', 'mpa-boost-deep-dive.md#g-outlet'),

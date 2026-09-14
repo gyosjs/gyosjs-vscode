@@ -67,8 +67,10 @@ export const GYOS_APIS: readonly RuntimeApiDefinition[] = [
   api('applyTransitionStyles', 'Gyos.applyTransitionStyles()', 'Install transition styles used by built-in transitions.'),
   api('setCspNonce', 'Gyos.setCspNonce(valueOrResolver?)', 'Configure the active CSP nonce used for scripts recreated by MPA Boost.', 'content-security-policy.md'),
   api('startRouter', 'Gyos.startRouter(options?)', 'Start MPA Boost when g-boost is present.', 'mpa-boost-deep-dive.md'),
-  api('onBeforeNavigate', 'Gyos.onBeforeNavigate(callback)', 'Subscribe to accepted MPA navigations before loading.', 'mpa-boost-deep-dive.md'),
-  api('onAfterNavigate', 'Gyos.onAfterNavigate(callback)', 'Subscribe after an MPA navigation commits.', 'mpa-boost-deep-dive.md'),
+  api('onBeforeNavigate', 'Gyos.onBeforeNavigate((url, context) => {}) => unsubscribe', 'Subscribe at request start. Keep page resources alive until an accepted swap.', 'api-reference.md#router-hooks'),
+  api('onBeforeSwap', 'Gyos.onBeforeSwap((url, context) => {}) => unsubscribe', 'Subscribe immediately before an accepted swap, for external widget cleanup. Rejected responses skip this hook.', 'api-reference.md#router-hooks'),
+  api('onAfterNavigate', 'Gyos.onAfterNavigate((url, context) => {}) => unsubscribe', 'Subscribe after the swap pipeline completes, including opted-in HTTP error HTML.', 'api-reference.md#router-hooks'),
+  api('onNavigationEnd', 'Gyos.onNavigationEnd(context => {}) => unsubscribe', 'Receive each navigation outcome, status, committed state and fallback flag, including failures and cancellation.', 'api-reference.md#router-hooks'),
   api('portalCreate', 'Gyos.portalCreate(element, target)', 'Move an element into a portal target.'),
   api('portalDestroy', 'Gyos.portalDestroy(element)', 'Restore or destroy a portal element.'),
   api('version', 'Gyos.version', 'Current GyosJS runtime version.')
