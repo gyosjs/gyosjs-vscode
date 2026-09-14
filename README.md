@@ -47,7 +47,7 @@ Add `g-ignore` to a subtree when GyosJS should not process it. The extension fol
 
 ## Runtime Compatibility
 
-Extension `0.2.x` tracks the public template and runtime contract of GyosJS `0.3.x`, including `g-reveal`, generic reactive attributes, `g-show` transitions, and the optional strict-CSP distribution.
+Extension `0.3.x` tracks GyosJS `0.4.x`, including `g-boost-errors`, `g-head-persist`, `g-router-remove` and navigation hooks with context/unsubscribe. Older GyosJS apps still receive these suggestions; check the runtime version before using new APIs. Strict-CSP expressions remain a restricted subset of JavaScript.
 
 The standard and CSP builds use the same template attributes, so highlighting, completion, hover, and navigation work for both. The CSP build intentionally accepts a smaller expression language. The extension does not execute expressions or attempt full CSP-expression validation; use the CSP compatibility table in the GyosJS documentation when authoring strict-CSP templates.
 

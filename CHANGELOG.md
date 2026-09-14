@@ -2,6 +2,17 @@
 
 All notable changes to the GyosJS Visual Studio Code extension are documented here.
 
+## 0.3.0 - 2026-09-14
+
+### Added
+
+- GyosJS 0.4 contract: completion, hover, highlighting and MPA audit recognition for `g-boost-errors`, `g-head-persist` and `g-router-remove`.
+- Runtime API completion/hover for `onBeforeSwap` and `onNavigationEnd`; existing navigation hooks describe context and unsubscribe.
+
+### Changed
+
+- Compatibility guidance and regression fixtures track the GyosJS 0.4 router contract.
+
 ## 0.2.0 - 2026-08-18
 
 ### Added

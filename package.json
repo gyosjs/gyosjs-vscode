@@ -2,7 +2,7 @@
   "name": "gyosjs",
   "displayName": "GyosJS",
   "description": "Syntax highlighting, IntelliSense, hovers, snippets, and diagnostics for GyosJS templates.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "publisher": "gyosjs",
   "preview": true,
   "license": "MIT",
@@ -96,7 +96,9 @@
           "type": "array",
           "default": [],
           "scope": "window",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "description": "Additional path fragments excluded from the GyosJS workspace index. VS Code files.exclude rules and common dependency, cache, generated, declaration, and minified paths are excluded automatically."
         },
         "gyosjs.indexing.maxFileSizeKb": {
