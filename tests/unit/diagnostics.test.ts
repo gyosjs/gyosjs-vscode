@@ -6,6 +6,12 @@ function codes(source: string): string[] {
 }
 
 describe('conservative template diagnostics', () => {
+  it('accepts GyosJS 0.4 router attributes without treating literal keys/statuses as expressions', () => {
+    const source = `<head><script src="/sdk.js" g-head-persist="analytics"></script></head>
+      <body g-boost><main g-outlet><form action="/save" method="post" g-boost-errors="422, 429">
+      <button>Save</button></form><a href="/items?page=2" g-swap="append" g-router-remove>More</a></main></body>`;
+    expect(analyzeTemplate(source)).toEqual([]);
+  });
   it('accepts representative valid GyosJS templates', () => {
     const source = `<body g-boost>
       <main g-scope="Page" g-outlet>

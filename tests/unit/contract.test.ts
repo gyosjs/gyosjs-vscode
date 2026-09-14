@@ -13,7 +13,7 @@ describe('GyosJS language contract', () => {
   it('keeps exact built-in names unique', () => {
     const names = ALL_DEFINITIONS.map(definition => definition.name);
     expect(new Set(names).size).toBe(names.length);
-    expect(GYOS_CONTRACT_VERSION).toBe('0.3');
+    expect(GYOS_CONTRACT_VERSION).toBe('0.4');
   });
 
   it('covers the GyosJS 0.3 CSP public surface', () => {
@@ -25,6 +25,11 @@ describe('GyosJS language contract', () => {
   });
 
   it('covers dynamic GyosJS attribute families', () => {
+    expect(findDefinition('g-boost-errors')?.valueRequired).toBe(true);
+    expect(findDefinition('g-head-persist')?.tags).toContain('script');
+    expect(findDefinition('g-router-remove')?.kind).toBe('router');
+    expect(GYOS_APIS.find(api => api.name === 'onBeforeSwap')?.signature).toContain('unsubscribe');
+    expect(GYOS_APIS.find(api => api.name === 'onNavigationEnd')?.signature).toContain('context');
     expect(findDefinition('g-model.debounce.300')?.name).toBe('g-model');
     expect(findDefinition('g-scope-persist')?.name).toBe('g-scope-persist');
     expect(findDefinition('g-transition.500')?.name).toBe('g-transition');

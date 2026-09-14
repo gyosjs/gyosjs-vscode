@@ -24,6 +24,20 @@ export async function run(): Promise<void> {
     ' '
   );
   assert.ok(completions.items.some(item => item.label === 'g-scope'));
+  assert.ok(completions.items.some(item => item.label === 'g-router-remove'));
+
+  for (const [tag, attribute] of [['form', 'g-boost-errors'], ['script', 'g-head-persist']]) {
+    const routerDocument = await vscode.workspace.openTextDocument({ language: 'html', content: `<${tag} ></${tag}>` });
+    const items = await vscode.commands.executeCommand<vscode.CompletionList>(
+      'vscode.executeCompletionItemProvider', routerDocument.uri, new vscode.Position(0, tag.length + 2), ' '
+    );
+    assert.ok(items.items.some(item => item.label === attribute), `Missing ${attribute} completion`);
+    const example = await vscode.workspace.openTextDocument({ language: 'html', content: `<${tag} ${attribute}="422"></${tag}>` });
+    const docs = await vscode.commands.executeCommand<vscode.Hover[]>(
+      'vscode.executeHoverProvider', example.uri, new vscode.Position(0, tag.length + 4)
+    );
+    assert.ok(docs.length > 0, `Missing ${attribute} hover`);
+  }
 
   const prefixedDocument = await vscode.workspace.openTextDocument({ language: 'html', content: '<div *i></div>' });
   const prefixed = await vscode.commands.executeCommand<vscode.CompletionList>(
