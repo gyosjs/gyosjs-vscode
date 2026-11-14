@@ -1,0 +1,6 @@
+{
+  "parser": "html",
+  "printWidth": 80,
+  "htmlWhitespaceSensitivity": "css",
+  "endOfLine": "lf"
+}

@@ -23,6 +23,7 @@ export interface ElementToken {
 export interface TemplateScan {
   elements: ElementToken[];
   roots: ElementToken[];
+  text: Array<{ start: number; end: number; parent: ElementToken }>;
 }
 
 const VOID_ELEMENTS = new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr']);
@@ -38,6 +39,12 @@ function isWhitespace(char: string): boolean {
 }
 
 function skipServerBlock(source: string, offset: number): number | null {
+  const bladeBlock = /^@(php|verbatim)\b(?!\s*\()/.exec(source.slice(offset));
+  if (bladeBlock) {
+    const close = `@end${bladeBlock[1]}`;
+    const end = source.indexOf(close, offset + bladeBlock[0].length);
+    return end === -1 ? source.length : end + close.length;
+  }
   if (source.startsWith('<?', offset)) {
     const end = source.indexOf('?>', offset + 2);
     return end === -1 ? source.length : end + 2;
@@ -200,6 +207,7 @@ export function scanTemplate(source: string): TemplateScan {
   const roots: ElementToken[] = [];
   const elements: ElementToken[] = [];
   const stack: ElementToken[] = [];
+  const text: TemplateScan['text'] = [];
   let cursor = 0;
 
   while (cursor < source.length) {
@@ -213,8 +221,18 @@ export function scanTemplate(source: string): TemplateScan {
       cursor = serverEnd;
       continue;
     }
+    const bladeEnd = source[cursor] === '@' ? skipBladeDirective(source, cursor) : null;
+    if (bladeEnd !== null) {
+      cursor = bladeEnd;
+      continue;
+    }
     if (source[cursor] !== '<') {
-      cursor++;
+      const start = cursor++;
+      while (cursor < source.length && source[cursor] !== '<'
+        && !source.startsWith('{{', cursor) && !source.startsWith('{!!', cursor)
+        && source[cursor] !== '@') cursor++;
+      const parent = stack.at(-1);
+      if (parent) text.push({ start, end: cursor, parent });
       continue;
     }
     if (source.startsWith('</', cursor)) {
@@ -270,7 +288,7 @@ export function scanTemplate(source: string): TemplateScan {
   }
 
   for (const element of stack) element.end = source.length;
-  return { elements, roots };
+  return { elements, roots, text };
 }
 
 export function attributeAtOffset(scan: TemplateScan, offset: number): { element: ElementToken; attribute: AttributeToken } | null {

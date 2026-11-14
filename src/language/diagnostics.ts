@@ -1,4 +1,5 @@
 import { ALL_DEFINITIONS, MODEL_MODIFIERS } from './contract';
+import { interpolationIssues } from './interpolation-diagnostics';
 import { getAttribute, scanTemplate, type AttributeToken, type ElementToken } from './scanner';
 
 export type IssueSeverity = 'error' | 'warning';
@@ -279,6 +280,7 @@ function validateRouterElement(element: ElementToken, issues: TemplateIssue[]): 
 export function analyzeTemplate(source: string, options: AnalyzeTemplateOptions = {}): TemplateIssue[] {
   const issues: TemplateIssue[] = [];
   const scan = scanTemplate(source);
+  issues.push(...interpolationIssues(source, scan));
   for (const element of scan.elements) {
     if (element.ignored) continue;
     validateStructure(element, scan.roots, issues);

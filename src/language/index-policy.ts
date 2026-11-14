@@ -68,7 +68,7 @@ export function isExcludedPath(path: string, configured: readonly string[] = [])
 }
 
 export function hasGyosSourceHint(path: string, source: string, template = isTemplatePath(path)): boolean {
-  return (template ? TEMPLATE_HINT : SCRIPT_HINT).test(source);
+  return (template && TEMPLATE_HINT.test(source)) || SCRIPT_HINT.test(source);
 }
 
 export function exceedsIndexSize(size: number, maxFileSizeKb = DEFAULT_MAX_FILE_SIZE_KB): boolean {

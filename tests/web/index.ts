@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { checkFormattingDiagnostics } from '../shared/formatting';
 
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) throw new Error(message);
@@ -17,4 +18,5 @@ export async function run(): Promise<void> {
     ' '
   );
   assert(completions.items.some(item => item.label === 'g-outlet'), 'Web completion provider did not activate');
+  await checkFormattingDiagnostics();
 }

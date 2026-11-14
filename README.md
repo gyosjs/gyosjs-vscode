@@ -47,6 +47,14 @@ Add `g-ignore` to a subtree when GyosJS should not process it. The extension fol
 
 ## Runtime Compatibility
 
+### Formatting text expressions
+
+The development version warns when a closed single/double-quoted string in a scoped `{expression}` contains a raw line break (`multiline-interpolation-string`). Generic HTML formatters can introduce this while wrapping long text. Prefer a short binding such as `{message}` with a scope field/getter, or `g-text="message"`. For a specific element, Prettier also supports an HTML `<!-- prettier-ignore -->` comment immediately before it.
+
+This is a targeted diagnostic, not a formatter or a complete JavaScript validator. It does not change format-on-save settings or rewrite strings. It skips server blocks, ignored/raw-text regions, content replaced by `g-text`/`g-html`, incomplete strings, template literals, entities and expressions with slash tokens outside strings. A missing warning does not establish that an expression is valid. See [the reproducible case and validation](docs/FORMATTING.md).
+
+### Published contract
+
 Extension `0.3.x` tracks GyosJS `0.4.x`, including `g-boost-errors`, `g-head-persist`, `g-router-remove` and navigation hooks with context/unsubscribe. Older GyosJS apps still receive these suggestions; check the runtime version before using new APIs. Strict-CSP expressions remain a restricted subset of JavaScript.
 
 The standard and CSP builds use the same template attributes, so highlighting, completion, hover, and navigation work for both. The CSP build intentionally accepts a smaller expression language. The extension does not execute expressions or attempt full CSP-expression validation; use the CSP compatibility table in the GyosJS documentation when authoring strict-CSP templates.
@@ -78,7 +86,7 @@ npm run package
 
 ## Development
 
-Node.js 20 or newer is required.
+Node.js 20.19 or newer is required for development; Node.js 22 is recommended.
 
 ```bash
 npm ci
