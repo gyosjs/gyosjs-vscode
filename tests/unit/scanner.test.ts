@@ -2,6 +2,20 @@ import { describe, expect, it } from 'vitest';
 import { attributeAtOffset, getAttribute, scanTemplate } from '../../src/language/scanner';
 
 describe('template scanner', () => {
+  it('keeps Blade PHP/verbatim blocks and directive arguments out of text and elements', () => {
+    const source = `<main g-scope="Page">
+      @php $markup = '<p g-scope="Fake">{broken}</p>'; @endphp
+      @verbatim <p g-scope="Fake">{literal}</p> @endverbatim
+      @if('text (nested) <p g-scope="Fake">')<p>{real}</p>@endif
+      @php($value = 'inline')<p>{last}</p>
+    </main>`;
+    const scan = scanTemplate(source);
+    expect(scan.elements.filter(element => getAttribute(element, 'g-scope'))).toHaveLength(1);
+    const text = scan.text.map(region => source.slice(region.start, region.end)).join('');
+    expect(text).toContain('{real}');
+    expect(text).toContain('{last}');
+    expect(text).not.toMatch(/broken|literal|nested|inline/);
+  });
   it('tracks multiline elements, attributes, and hierarchy', () => {
     const source = `<main g-scope="App">
       <button

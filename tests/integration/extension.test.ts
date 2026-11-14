@@ -1,5 +1,6 @@
 import * as assert from 'node:assert/strict';
 import * as vscode from 'vscode';
+import { checkFormattingDiagnostics } from '../shared/formatting';
 import { indexSource } from '../../src/language/workspace-index';
 import { WorkspaceIndex } from '../../src/language/workspace-index';
 import { GyosDefinitionProvider, GyosSemanticTokensProvider } from '../../src/language/intelligence';
@@ -158,6 +159,8 @@ export async function run(): Promise<void> {
     content: '<script type="module">import CspGyos from \'gyosjs/csp\'; CspGyos.setCspNonce(() => document.querySelector(\'meta[name="csp-nonce"]\')?.content);</script>'
   });
   const cspOffset = cspDocument.getText().indexOf('setCspNonce') + 3;
+  // No g-* attribute or literal Gyos receiver: the import alone must enable indexing.
+  assert.ok(indexSource(cspDocument.uri, cspDocument.getText()).scan, 'Aliased import template was skipped');
   const cspHover = await vscode.commands.executeCommand<vscode.Hover[]>(
     'vscode.executeHoverProvider', cspDocument.uri, cspDocument.positionAt(cspOffset)
   );
@@ -188,4 +191,5 @@ export async function run(): Promise<void> {
   await new Promise(resolve => setTimeout(resolve, 250));
   const diagnostics = vscode.languages.getDiagnostics(document.uri);
   assert.ok(diagnostics.some(item => item.code === 'invalid-model-modifier'));
+  await checkFormattingDiagnostics();
 }

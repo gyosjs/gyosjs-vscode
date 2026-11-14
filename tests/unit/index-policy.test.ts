@@ -8,6 +8,13 @@ import {
 } from '../../src/language/index-policy';
 
 describe('workspace index policy', () => {
+  it('indexes templates whose only Gyos hint is an aliased module import', () => {
+    const source = '<script type="module">import CspGyos from "gyosjs/csp"; CspGyos.setCspNonce("nonce");</script>';
+    for (const path of ['/page.html', '/page.php', '/page.blade.php']) {
+      expect(hasGyosSourceHint(path, source)).toBe(true);
+    }
+    expect(hasGyosSourceHint('/page.html', '<script>import Other from "other";</script>')).toBe(false);
+  });
   it('excludes dependency, generated, cache, declaration, and minified files', () => {
     const excluded = [
       '/project/node_modules/pkg/index.js',

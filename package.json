@@ -17,7 +17,7 @@
   },
   "engines": {
     "vscode": "^1.90.0",
-    "node": ">=20"
+    "node": ">=20.19.0"
   },
   "categories": [
     "Programming Languages",
@@ -165,6 +165,6 @@
     "esbuild": "^0.28.1",
     "ovsx": "^1.1.0",
     "typescript": "^5.9.3",
-    "vitest": "^3.2.6"
+    "vitest": "4.1.12"
   }
 }

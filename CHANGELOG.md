@@ -2,6 +2,21 @@
 
 All notable changes to the GyosJS Visual Studio Code extension are documented here.
 
+## Unreleased
+
+### Added
+
+- Warn about raw line breaks inside closed single/double-quoted text interpolation strings in scoped templates, including damage introduced by HTML formatters. Highlight the string and suggest scope labels or `g-text` without rewriting content.
+
+### Fixed
+
+- Index inline scripts that import GyosJS under an alias even when the template has no other Gyos syntax, restoring API hover/navigation in those documents.
+- Keep Blade PHP/verbatim blocks and directive arguments opaque when scanning template text. The new warning excludes ignored/raw-text content, server expressions and ambiguous JavaScript token classes.
+
+### Maintenance
+
+- Refresh development dependency patches and move tests to Vitest 4.1.12 to clear high/critical audit findings. Development now requires Node.js 20.19 or newer; the VS Code minimum remains 1.90.0.
+
 ## 0.3.0 - 2026-09-14
 
 ### Added
