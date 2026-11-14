@@ -2,7 +2,7 @@
 
 All notable changes to the GyosJS Visual Studio Code extension are documented here.
 
-## Unreleased
+## 0.3.1 - 2026-11-14
 
 ### Added
 
